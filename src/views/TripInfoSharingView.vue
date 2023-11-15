@@ -7,42 +7,57 @@
     </template>
   </a-table>
 </template>
-<script lang="ts" setup>
-import type { TableColumnsType } from 'ant-design-vue';
-const columns: TableColumnsType = [
-  { title: 'Full Name', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
-  { title: 'Age', width: 100, dataIndex: 'age', key: 'age', fixed: 'left' },
-  { title: 'Column 1', dataIndex: 'address', key: '1', width: 150 },
-  { title: 'Column 2', dataIndex: 'address', key: '2', width: 150 },
-  { title: 'Column 3', dataIndex: 'address', key: '3', width: 150 },
-  { title: 'Column 4', dataIndex: 'address', key: '4', width: 150 },
-  { title: 'Column 5', dataIndex: 'address', key: '5', width: 150 },
-  { title: 'Column 6', dataIndex: 'address', key: '6', width: 150 },
-  { title: 'Column 7', dataIndex: 'address', key: '7', width: 150 },
-  { title: 'Column 8', dataIndex: 'address', key: '8' },
+<script setup>
+const columns = [
   {
-    title: 'Action',
-    key: 'operation',
-    fixed: 'right',
+    title: '#',
     width: 100,
+    dataIndex: 'idx',
+    key: 'idx',
+    fixed: 'left',
   },
+  {
+    title: '제목',
+    width: 100,
+    dataIndex: 'subject',
+    key: 'subject',
+    fixed: 'left',
+  },
+  {
+    title: '작성자명',
+    dataIndex: 'userId',
+    key: 'userId',
+    width: 150,
+  },
+  {
+    title: '좋아요',
+    dataIndex: 'Like',
+    key: 'Like',
+    width: 150,
+  },
+  {
+    title: '조회수',
+    dataIndex: 'hit',
+    key: 'hit',
+    width: 150,
+  },
+  {
+    title: '등록시간',
+    dataIndex: 'registeredTime',
+    key: 'registeredTime',
+    width: 150,
+  }
 ];
-
-interface DataItem {
-  key: number;
-  name: string;
-  age: number;
-  address: string;
-}
-
-const data: DataItem[] = [];
-for (let i = 0; i < 100; i++) {
+const data = [];
+for (let i = 1; i <= 123; i++) {
   data.push({
-    key: i,
-    name: `Edrward ${i}`,
-    age: 32,
+    idx: i,
+    userId: `Edrward`,
+    subject: `Edrward ${i}`,
     address: `London Park no. ${i}`,
+    hit : parseInt(Math.random() * 1001),
+    Like : parseInt(Math.random() * 1001),
+    registeredTime : new Date()
   });
 }
 </script>
-
