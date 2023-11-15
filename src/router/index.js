@@ -14,7 +14,7 @@ const router = createRouter({
     ...attractionRouter,
     ...hotPlaceRouter,
     ...tripPlanRouter,
-    ...memberRouter
+    ...memberRouter,
   ]
 })
 
