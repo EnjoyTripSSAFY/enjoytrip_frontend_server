@@ -16,7 +16,7 @@ const attractionRouter = [
       {
         path: 'view/:articleno',
         name: 'tripInfoSharing-view',
-        component: () => import('@/components/board/BoardDetail.vue')
+        component: () => import('@/')
       },
       {
         path: 'write',
