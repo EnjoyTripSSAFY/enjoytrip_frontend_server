@@ -4,6 +4,7 @@ import tripInfoSharingRouter from './tripInfoSharingRouter'
 import attractionRouter from './attractionRouter'
 import hotPlaceRouter from './hotPlaceRouter'
 import tripPlanRouter from './tripPlanRouter'
+import memberRouter from "@/router/memberRouter";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,7 +13,8 @@ const router = createRouter({
     ...tripInfoSharingRouter,
     ...attractionRouter,
     ...hotPlaceRouter,
-    ...tripPlanRouter
+    ...tripPlanRouter,
+    ...memberRouter,
   ]
 })
 
