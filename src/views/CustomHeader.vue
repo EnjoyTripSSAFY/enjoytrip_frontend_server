@@ -9,6 +9,7 @@
           <a-menu mode="horizontal" :theme="menuTheme" :selected-keys="[currentMenu]" @select="handleMenuSelect">
             <a-menu-item key="attraction" @click="moveAttraction">지역별 관광지</a-menu-item>
             <a-menu-item key="plan" @click="moveTripPlan">나의 여행계획</a-menu-item>
+            <a-menu-item key="plan" @click="moveMyPlan">여행계획 조회</a-menu-item>
             <a-menu-item key="contact" @click="moveHotPlace">핫플 자랑하기</a-menu-item>
             <a-menu-item key="sharing" @click="moveTripInfoSharing">핫플 자랑하기</a-menu-item>
           </a-menu>
@@ -82,6 +83,10 @@ function moveLogin(){
 
 function moveRegister(){
   router.push({ name: 'register' })
+}
+
+function moveMyPlan(){
+  router.push({ name: 'myPlan' })
 }
 
 </script>
