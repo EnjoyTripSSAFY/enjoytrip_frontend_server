@@ -1,9 +1,9 @@
-const hotPlaceRouter = [
-  {
-    path: '/hotPlace',
-    name: 'hotPlace',
-    component: () => import('@/views/HotPlaceView.vue')
-  }
-]
+// const hotPlaceRouter = [
+//   {
+//     path: '/hotPlace',
+//     name: 'hotPlace',
+//     component: () => import('@/views/HotPlaceView.vue')
+//   }
+// ]
 
-export default hotPlaceRouter
+// export default hotPlaceRouter

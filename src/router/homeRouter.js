@@ -1,11 +1,11 @@
-import HomeView from '../views/HomeView.vue'
+// import HomeView from '../views/HomeView.vue'
 
-const homeRouter = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  }
-]
+// const homeRouter = [
+//   {
+//     path: '/',
+//     name: 'home',
+//     component: HomeView
+//   }
+// ]
 
-export default homeRouter
+// export default homeRouter
