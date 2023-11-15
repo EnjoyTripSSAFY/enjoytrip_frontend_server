@@ -1,9 +1,8 @@
 <script setup>
-import AttractionTransfer from '@/components/trip-plan/items/AttractionTransfer.vue'
 import DefaultButton from '@/components/commons/items/DefaultButton.vue'
-import Page1SubHeader from '@/components/trip-plan/items/Page1SubHeader.vue'
-import PlanMaker from '@/components/trip-plan/items/PlanMaker.vue'
+import Page2SubHeader from '@/components/trip-plan/items/Page2SubHeader.vue'
 import AttractionList from '@/components/attraction/AttractionList.vue'
+import AttractionSelection from './items/AttractionSelection.vue'
 
 const headerStyle = {
   textAlign: 'center',
@@ -36,11 +35,16 @@ const footerStyle = {
     <a-space direction="vertical" :style="{ width: '100%' }" :size="[0, 48]">
       <a-layout>
         <a-layout-header :style="headerStyle">header</a-layout-header>
-        <Page1SubHeader />
+        <Page2SubHeader />
         <a-layout>
           <a-layout-content :style="contentStyle"><AttractionList /></a-layout-content>
           <a-layout-sider :style="siderStyle" :width="800" :theme="dark">
-            <PlanMaker /><AttractionTransfer />
+            <!-- <PlanMaker /><AttractionTransfer /> -->
+
+            <!-- 선택된 날짜만큼 관광지 선택지 뿌리기 -->
+            <AttractionSelection />
+            <AttractionSelection />
+            <AttractionSelection />
             <div class="button"><DefaultButton /></div>
           </a-layout-sider>
         </a-layout>

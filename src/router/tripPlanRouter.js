@@ -1,9 +1,9 @@
-// const tripPlanRouter = [
-//   {
-//     path: '/tripPlan',
-//     name: 'tripPlan',
-//     component: () => import('@/views/TripPlanView.vue')
-//   }
-// ]
+const tripPlanRouter = [
+  {
+    path: '/tripPlan',
+    name: 'tripPlan',
+    component: () => import('@/views/TripPlanView.vue')
+  }
+]
 
-// export default tripPlanRouter
+export default tripPlanRouter

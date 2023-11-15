@@ -1,12 +1,12 @@
 <template>
   <a-page-header
     style="border: 1px solid rgb(235, 237, 240)"
-    title="여행 정보 리스트"
+    title="세부 계획"
     :breadcrumb="{ routes }"
-    sub-title="담고 싶은 여행지를 선택하세요!"
+    sub-title="세부 계획을 작성하세요!"
   />
 </template>
-<script>
+<script setup>
 const routes = [
   {
     path: 'index',
