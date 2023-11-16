@@ -42,7 +42,7 @@
 <script>
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons-vue'
 import { defineComponent, reactive, ref } from 'vue'
-import TimePicker from '../../commons/items/TimePicker.vue'
+import TimePicker from '../../common/items/TimePicker.vue'
 export default defineComponent({
   setup() {
     const formRef = ref()

@@ -1,6 +1,6 @@
 <script setup>
 import AttractionTransfer from '@/components/trip-plan/items/AttractionTransfer.vue'
-import DefaultButton from '@/components/commons/items/DefaultButton.vue'
+import DefaultButton from '@/components/common/items/DefaultButton.vue'
 import Page1SubHeader from '@/components/trip-plan/items/Page1SubHeader.vue'
 import PlanMaker from '@/components/trip-plan/items/PlanMaker.vue'
 import AttractionList from '@/components/attraction/AttractionList.vue'

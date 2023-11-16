@@ -1,5 +1,5 @@
 <script setup>
-import DefaultButton from '@/components/commons/items/DefaultButton.vue'
+import DefaultButton from '@/components/common/items/DefaultButton.vue'
 import Page2SubHeader from '@/components/trip-plan/items/Page2SubHeader.vue'
 import AttractionList from '@/components/attraction/AttractionList.vue'
 import AttractionSelection from './items/AttractionSelection.vue'

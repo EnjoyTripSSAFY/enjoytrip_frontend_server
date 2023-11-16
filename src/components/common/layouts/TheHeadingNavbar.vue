@@ -27,7 +27,7 @@ function moveTripPlan() {
   <nav class="navbar navbar-expand-sm navbar-light fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand fw-bolder text-light-emphasis" @click="moveHome">
-        <img class="logo_png" src="@/assets/img/gallery/logo.png" />
+        <img class="logo_png" src="../../../assets/img/gallery/logo.png" />
         앤조이트립
       </a>
 
