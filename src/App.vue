@@ -1,9 +1,11 @@
-<template>
-  <demo />
-</template>
-
 <script setup>
-import Demo from '@/views/Demo.vue'
+import DemoView from '@/views/DemoView.vue'
 </script>
+
+<template>
+  <div>
+    <DemoView />
+  </div>
+</template>
 
 <style scoped></style>

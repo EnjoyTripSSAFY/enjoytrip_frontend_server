@@ -5,13 +5,6 @@ import Page1SubHeader from '@/components/trip-plan/items/Page1SubHeader.vue'
 import PlanMaker from '@/components/trip-plan/items/PlanMaker.vue'
 import AttractionList from '@/components/attraction/AttractionList.vue'
 
-const headerStyle = {
-  textAlign: 'center',
-  height: 64,
-  paddingInline: 50,
-  lineHeight: '100px',
-  backgroundColor: '#7dbcea'
-}
 const contentStyle = {
   minHeight: 120
   // backgroundColor: 'lightgray'
@@ -23,19 +16,12 @@ const siderStyle = {
   backgroundColor: 'white',
   paddingInline: '30px'
 }
-
-const footerStyle = {
-  textAlign: 'center',
-  color: '#fff',
-  backgroundColor: '#7dbcea'
-}
 </script>
 
 <template>
   <div>
     <a-space direction="vertical" :style="{ width: '100%' }" :size="[0, 48]">
       <a-layout>
-        <a-layout-header :style="headerStyle">header</a-layout-header>
         <Page1SubHeader />
         <a-layout>
           <a-layout-content :style="contentStyle"><AttractionList /></a-layout-content>
@@ -44,7 +30,6 @@ const footerStyle = {
             <div class="button"><DefaultButton /></div>
           </a-layout-sider>
         </a-layout>
-        <a-layout-footer :style="footerStyle">Footer</a-layout-footer>
       </a-layout>
     </a-space>
   </div>
