@@ -16,7 +16,8 @@ const tripInfoSharingRouter = [
       {
         path: 'view/:articleno',
         name: 'tripInfoSharing-view',
-        component: () => import('@/components/board/BoardDetail.vue')
+        props : true,
+        component: () => import('@/components/tripInfoSharing/tripInfoSharingDetail.vue')
       },
       {
         path: 'write',
@@ -26,6 +27,7 @@ const tripInfoSharingRouter = [
       {
         path: 'modify/:articleno',
         name: 'tripInfoSharing-modify',
+        props : true,
         component: () => import('@/components/tripInfoSharing/tripInfoSharingModify.vue')
       }
     ]

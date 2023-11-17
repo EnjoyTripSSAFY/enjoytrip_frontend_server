@@ -1,77 +1,78 @@
-<script setup>
-import TripInfoSharingWriteItem from './item/tripInfoSharingWriteItem.vue'
-</script>
-
 <template>
-  <div class="container mt-5 pt-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-          <mark class="sky">글쓰기</mark>
-        </h2>
+  <div style="display: flex; justify-content: center; align-items: center; height: 80vh;">
+    <a-form ref="formRef" :model="formState" :rules="rules" style="width: 65%; display: flex; flex-direction: column;">
+      <h2>글 작성하기</h2>
+
+      <a-form-item ref="title" label="제목 " name="title">
+        <a-input v-model:value="formState.title"/>
+      </a-form-item>
+
+      <div style="flex: 1; width: 100%;">
+        <markdown-editor v-model="content" ref="childRef"  />
       </div>
-      <div class="col-lg-10 text-start">
-        <TripInfoSharingWriteItem type="regist" />
-      </div>
-    </div>
+
+      <a-form-item>
+        <a-button type="primary" @click="onSubmit">Create</a-button>
+        <a-button style="margin-top:10px; margin-left: 30px" @click="resetForm">Reset</a-button>
+      </a-form-item>
+    </a-form>
   </div>
-  <!-- <main
-    class="d-flex justify-content-center align-items-center my-auto"
-    style="padding: 10vh 0 5vh 0"
-  >
-    <div>
-      <h2 class="text-center">여행정보공유</h2>
-      <hr />
-
-      <div class="mb-3">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-9">
-              <div class="row my-3"></div> -->
-  <!-- 가운데 정렬을 원하는 내용 -->
-  <!-- <div class="row">
-                <h4>글 쓰기</h4>
-              </div>
-            </div>
-            <div class="row my-3"></div>
-            <form action="/article" method="post">
-              <div class="mb-3">
-                <label class="mb-2 text-muted" for="title">제목</label>
-                <input
-                  id="signup_nickname"
-                  type="text"
-                  class="form-control"
-                  name="title"
-                  value=""
-                  required
-                  autofocus
-                  placeholder="제목을 입력하세요"
-                />
-              </div>
-              <div class="mb-3">
-                <label class="mb-2 text-muted" for="contents">내용</label>
-                <div id="editor">
-                  <textarea id="contents" name="contents"></textarea>
-                </div>
-              </div>
-              <input type="hidden" id="hiddenField" name="content" value="" />
-              <input type="hidden" id="action" name="action" value="write" />
-
-              <div style="padding: 5px 0px 5px 50px; float: right">
-                <input class="btn btn-primary" type="submit" value="글 등록하기" />
-              </div>
-              
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main> -->
 </template>
 
-<style scoped>
-#contents {
-  width: 500px;
-  height: 500px;
-}
-</style>
+<script setup>
+import {onMounted, reactive, ref, watch} from "vue";
+import MarkdownEditor from "@/components/common/editor/editor.vue"
+import {detailBoard, postBoard} from "@/api/boardApi"
+
+const content = ref('');
+const formRef = ref();
+
+watch(content, (newContent, oldContent) => {
+  console.log("Content changed:", newContent);
+});
+
+const formState = reactive({
+  title: '',
+});
+const rules = {
+  title: [
+    {
+      required: true,
+      message: '제목을 입력하세요!',
+      trigger: 'cursor',
+    },
+  ],
+};
+
+
+const childRef = ref(null)
+
+const onSubmit = () => {
+  formRef.value
+      .validate()
+      .then(async () => {
+        const params = {
+          content: content.value,
+          title: formState.title,
+          userId: 'ssafy'
+        }
+
+        const success = (response) => {
+          console.log(content.value)
+          console.log(response)
+        };
+        const fail = (error) => {
+          console.error(error)
+        };
+
+        await postBoard(params, success, fail)
+
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+};
+const resetForm = () => {
+  formRef.value.resetFields();
+};
+</script>

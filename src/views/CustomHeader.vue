@@ -11,7 +11,7 @@
             <a-menu-item key="plan" @click="moveTripPlan">나의 여행계획</a-menu-item>
             <a-menu-item key="myplan" @click="moveMyPlan">여행계획 조회</a-menu-item>
             <a-menu-item key="contact" @click="moveHotPlace">핫플 자랑하기</a-menu-item>
-            <a-menu-item key="sharing" @click="moveTripInfoSharing">핫플 자랑하기</a-menu-item>
+            <a-menu-item key="sharing" @click="moveTripInfoSharing">여행정보공유</a-menu-item>
           </a-menu>
       </a-col>
 

@@ -1,19 +1,20 @@
 <template>
   <div style="display: flex; justify-content: center; align-items: center; height: 80vh;">
-    <a-form :model="formState" :rules="rules" ref="formRef" style="width: 65%; display: flex; flex-direction: column;">
-      <h2>글 수정하기</h2>
+    <a-form :model="formState" ref="formRef" style="width: 65%; display: flex; flex-direction: column;">
+      <h2>글 조회</h2>
 
       <a-form-item label="제목" name="title">
-        <a-input v-model:value="formState.title" />
+        <a-input :value="formState.title" aria-readonly="true" />
       </a-form-item>
 
       <div style="flex: 1; width: 100%;">
-        <markdown-editor v-model="content" ref="childRef" />
+        <MarkdownViewer v-model="content" ref="childRef" />
       </div>
 
       <a-form-item>
         <a-button type="primary" @click="onSubmit">수정</a-button>
-        <a-button style="margin-top: 10px; margin-left: 30px" @click="resetForm">취소</a-button>
+        <a-button style="margin-top: 10px; margin-left: 10px" @click="resetForm">삭제</a-button>
+        <a-button style="margin-top: 10px; margin-left: 10px" @click="resetForm">목록</a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -21,7 +22,7 @@
 
 <script setup>
 import { onMounted, reactive, ref, watch } from "vue";
-import MarkdownEditor from "@/components/common/editor/editor.vue";
+import MarkdownViewer from "@/components/common/editor/viewer.vue";
 import { detailBoard, editBoard } from "@/api/boardApi";
 import {useRoute} from "vue-router";
 
@@ -35,15 +36,6 @@ const formState = reactive({
   title: "",
 });
 
-const rules = {
-  title: [
-    {
-      required: true,
-      message: "제목을 입력하세요!",
-      trigger: "blur",
-    },
-  ],
-};
 
 const onSubmit = async () => {
   try {

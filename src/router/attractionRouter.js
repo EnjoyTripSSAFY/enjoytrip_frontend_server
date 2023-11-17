@@ -13,21 +13,6 @@ const attractionRouter = [
         name: 'attraction-list',
         component: AttractionList
       },
-      {
-        path: 'view/:articleno',
-        name: 'tripInfoSharing-view',
-        component: () => import('@/')
-      },
-      {
-        path: 'write',
-        name: 'tripInfoSharing-write',
-        component: () => import('@/components/tripInfoSharing/tripInfoSharingWrite.vue')
-      },
-      {
-        path: 'modify/:articleno',
-        name: 'tripInfoSharing-modify',
-        component: () => import('@/components/tripInfoSharing/tripInfoSharingModify.vue')
-      }
     ]
   }
 ]
