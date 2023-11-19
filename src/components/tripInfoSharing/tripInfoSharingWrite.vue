@@ -8,7 +8,7 @@
       </a-form-item>
 
       <div style="flex: 1; width: 100%;">
-        <markdown-editor v-model="content" ref="childRef"  />
+        <markdown-editor  :data="content" @setContent="setContent"  />
       </div>
 
       <a-form-item>
@@ -22,14 +22,14 @@
 <script setup>
 import {onMounted, reactive, ref, watch} from "vue";
 import MarkdownEditor from "@/components/common/editor/editor.vue"
-import {detailBoard, postBoard} from "@/api/boardApi"
+import {postBoard} from "@/api/boardApi"
 
 const content = ref('');
 const formRef = ref();
 
-watch(content, (newContent, oldContent) => {
-  console.log("Content changed:", newContent);
-});
+const setContent = (e) => {
+  content.value = e;
+};
 
 const formState = reactive({
   title: '',
@@ -43,9 +43,6 @@ const rules = {
     },
   ],
 };
-
-
-const childRef = ref(null)
 
 const onSubmit = () => {
   formRef.value

@@ -38,5 +38,19 @@ const editBoard = async (param, success , fail) => {
       .catch(fail)
 }
 
+const deleteBoard = async (param, success , fail) => {
+  const url = `${endPoint}/${param}`
 
-export { postBoard, detailBoard, editBoard }
+  const config = {
+    headers: {
+      'Content-Type': 'application/json', // Set the content type based on your API requirements
+    },
+  };
+
+  axios.delete(url)
+      .then(success)
+      .catch(fail)
+}
+
+
+export { postBoard, detailBoard, editBoard , deleteBoard}

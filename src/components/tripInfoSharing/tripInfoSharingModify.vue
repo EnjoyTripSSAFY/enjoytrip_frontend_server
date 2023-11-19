@@ -8,7 +8,7 @@
       </a-form-item>
 
       <div style="flex: 1; width: 100%;">
-        <markdown-editor v-model="content" ref="childRef" />
+        <markdown-editor v-if="contentIsLoaded" :data="content" @setContent="setContent"  />
       </div>
 
       <a-form-item>
@@ -28,8 +28,7 @@ import {useRoute} from "vue-router";
 const content = ref("");
 const formRef = ref();
 const route = useRoute()
-
-const childRef = ref(null);
+const contentIsLoaded = ref(false);
 
 const formState = reactive({
   title: "",
@@ -43,6 +42,10 @@ const rules = {
       trigger: "blur",
     },
   ],
+};
+
+const setContent = (e) => {
+  content.value = e;
 };
 
 const onSubmit = async () => {
@@ -83,10 +86,8 @@ onMounted(async () => {
     let success = (res) => {
       console.log(res)
       formState.title = res.data.result.title
-      let value = res.data.result.content;
-      console.log(value)
-      childRef.value.setHtml(value)
-
+      content.value = res.data.result.content;
+      contentIsLoaded.value = true
     }
 
     await detailBoard(boardId, success , fail);
