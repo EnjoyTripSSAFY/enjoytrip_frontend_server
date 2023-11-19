@@ -14,6 +14,7 @@
       <a-form-item>
         <a-button type="primary" @click="onSubmit">Create</a-button>
         <a-button style="margin-top:10px; margin-left: 30px" @click="resetForm">Reset</a-button>
+        <a-button style="margin-top:10px; margin-left: 30px" @click="moveList">List</a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -23,6 +24,7 @@
 import {onMounted, reactive, ref, watch} from "vue";
 import MarkdownEditor from "@/components/common/editor/editor.vue"
 import {postBoard} from "@/api/boardApi"
+import router from "@/router";
 
 const content = ref('');
 const formRef = ref();
@@ -69,6 +71,10 @@ const onSubmit = () => {
         console.log('error', error);
       });
 };
+
+const moveList = () => {
+  router.push({name : 'tripInfoSharing'})
+}
 const resetForm = () => {
   formRef.value.resetFields();
 };

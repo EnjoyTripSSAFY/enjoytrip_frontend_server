@@ -3,9 +3,9 @@
 <template>
   <div>
     <a-comment v-for="comment in comments" :key="comment.id">
-      <template #actions>
-        <span @click="startReply(comment)" v-if="!comment.isModifying && !comment.isDeleted">Reply</span>
-        <span @click="startModify(comment)" v-if="!comment.isModifying && !comment.isDeleted">Modify</span>
+      <template #actions v-if="comment.content.indexOf('삭제') === -1">
+        <span @click="startReply(comment)" v-if="!comment.isModifying">Reply</span>
+        <span @click="startModify(comment)" v-if="!comment.isModifying">Modify</span>
         <span v-if="!comment.isDeleted">
           <a-popconfirm
             title="정말로 해당 댓글을 삭제하시겠습니끼?"

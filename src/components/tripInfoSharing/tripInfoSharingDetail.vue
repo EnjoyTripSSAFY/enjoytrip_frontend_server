@@ -17,32 +17,39 @@
       </div>
 
       <a-form-item>
-        <a-button type="primary" @click="onSubmit">수정</a-button>
-        <a-button style="margin-top: 10px; margin-left: 10px" @click="resetForm">삭제</a-button>
-        <a-button style="margin-top: 10px; margin-left: 10px" @click="resetForm">목록</a-button>
+        <a-button type="primary" @click="moveEdit">수정</a-button>
+        <a-popconfirm
+            title="Are you sure delete this task?"
+            ok-text="Yes"
+            cancel-text="No"
+            @confirm="confirm"
+            @cancel="cancel"
+        >
+          <a-button style="margin-top: 10px; margin-left: 10px">삭제</a-button>
+        </a-popconfirm>
+        <a-button style="margin-top: 10px; margin-left: 10px" @click="moveList">목록</a-button>
       </a-form-item>
 
-      <a-collapse accordion class="scrollable-reply">
+      <a-collapse accordion class="scrollable-reply" style="max-height: 300px">
         <a-collapse-panel key="1" header="댓글">
           <CommentList v-if="replyIsLoaded" :comments="replies"/>
-          <a-comment>
-            <template #avatar>
-              <a-avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
-            </template>
-            <template #content>
-              <a-form-item>
-                <a-textarea v-model:value="reply.content" :rows="4" />
-              </a-form-item>
-              <a-form-item>
-                <a-button html-type="submit" :loading="submitting" type="primary" @click="handleSubmit">
-                  Add Comment
-                </a-button>
-              </a-form-item>
-            </template>
-          </a-comment>
         </a-collapse-panel>
-
       </a-collapse>
+      <a-comment>
+        <template #avatar>
+          <a-avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
+        </template>
+        <template #content>
+          <a-form-item>
+            <a-textarea v-model:value="reply.content" :rows="4" />
+          </a-form-item>
+          <a-form-item>
+            <a-button html-type="submit" :loading="submitting" type="primary" @click="handleSubmit">
+              Add Comment
+            </a-button>
+          </a-form-item>
+        </template>
+      </a-comment>
     </a-form>
 
 
@@ -54,19 +61,27 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue";
 import MarkdownViewer from "@/components/common/editor/viewer.vue";
-import {detailBoard} from "@/api/boardApi";
+import {detailBoard, deleteBoard} from "@/api/boardApi";
 import {listReply, registReply} from "@/api/replyApi"
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import CommentList from "@/components/tripInfoSharing/item/comment/CommentList.vue";
 
 const content = ref("");
 const formRef = ref();
-const route = useRoute()
 const contentIsLoaded = ref(false);
 const replyIsLoaded = ref(false);
 const boardId = ref(null)
 const submitting = ref(false)
+
+
+
+
+
 import { provide } from 'vue'
+import {message} from "ant-design-vue";
+const route = useRoute()
+const router = useRouter()
+
 
 provide('articleNo', route.params.articleno)
 
@@ -138,6 +153,25 @@ const handleSubmit = async () => {
     submitting.value = false
     reply.value.content = null
   }, fail)
+}
+
+const moveEdit = () => {
+  router.push({ name: 'tripInfoSharing-modify', params: { articleno: boardId.value }})
+}
+
+const confirm = e => {
+  deleteBoard(boardId.value, (res) => {
+    message.success('Click on Yes');
+    router.replace({name : 'tripInfoSharing'})
+  }, message.warn("게시글 삭제를 실패하였습니다."))
+};
+const cancel = e => {
+
+};
+
+
+const moveList = () => {
+  router.push({name : 'tripInfoSharing'})
 }
 
 </script>

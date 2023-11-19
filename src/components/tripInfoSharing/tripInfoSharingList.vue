@@ -17,7 +17,15 @@
 
 
   <div>
-    <a-table :columns="columns" :dataSource="tableData" :pagination="pagination" @change="handleTableChange"/>
+    <a-table :columns="columns" :dataSource="tableData" :pagination="pagination" @change="handleTableChange">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'title'">
+          <router-link :to="{name : 'tripInfoSharing-view', params : {'articleno' : record.no } }">{{ record.title }}</router-link>
+        </template>
+      </template>
+
+
+    </a-table>
   </div>
 
   <a-button type="primary" @click="moveWrite">글쓰기</a-button>
@@ -44,6 +52,7 @@ const columns = [
     dataIndex: 'title',
     key: 'title',
     fixed: 'left',
+    slots: { title: 'title' },
   },
   {
     title: '작성자명',
@@ -118,6 +127,12 @@ onMounted(() => {
 const moveWrite = () => {
   router.push({name : 'tripInfoSharing-write'})
 }
+
+const customRow = (record) => {
+  return {
+    onClick: (event) => console.log('record', record.no, 'event', event),
+  };
+};
 </script>
 
 <style>

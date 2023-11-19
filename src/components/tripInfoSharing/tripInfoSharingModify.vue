@@ -14,6 +14,7 @@
       <a-form-item>
         <a-button type="primary" @click="onSubmit">수정</a-button>
         <a-button style="margin-top: 10px; margin-left: 30px" @click="resetForm">취소</a-button>
+        <a-button style="margin-top: 10px; margin-left: 30px" @click="moveList">목록</a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -24,6 +25,7 @@ import { onMounted, reactive, ref, watch } from "vue";
 import MarkdownEditor from "@/components/common/editor/editor.vue";
 import { detailBoard, editBoard } from "@/api/boardApi";
 import {useRoute} from "vue-router";
+import router from "@/router";
 
 const content = ref("");
 const formRef = ref();
@@ -74,6 +76,7 @@ const onSubmit = async () => {
 
 const resetForm = () => {
   formRef.value.resetFields();
+  content.value = null
 };
 
 onMounted(async () => {
@@ -97,4 +100,8 @@ onMounted(async () => {
     console.error("Error fetching data from the server", error);
   }
 });
+
+const moveList = () => {
+  router.push({name : 'tripInfoSharing'})
+}
 </script>
