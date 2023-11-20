@@ -17,10 +17,12 @@ const getRequest = async (finalUrl) => {
     const response = await axios.get(finalUrl)
     if (!response.data || response.data.response.header.resultCode !== '0000') {
       throw new Error('Network response was not ok')
+      alert("네트워크 문제로 인하에 데이터를 받을 수 없습니다.")
     }
     return response.data.response.body.items.item
   } catch (error) {
     console.error('fetch error:', error)
+    alert("네트워크 문제로 인하에 데이터를 받을 수 없습니다.")
     return null
   }
 }
@@ -60,13 +62,13 @@ const getCityData = (city) => {
   return getRequest(finalUrl)
 }
 
-const getLocalTripData = async (state, city, type, pgno) => {
+const getLocalTripData = async (state, city, type) => {
   const service = 'areaBasedList1'
   const baseUrl = endPoint + service
 
   const queryParams = {
-    numOfRows: '20',
-    pageNo: pgno,
+    numOfRows: '100',
+    pageNo: 1,
     MobileOS: 'ETC',
     MobileApp: 'EnjoyTrip',
     areaCode: state,

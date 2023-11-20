@@ -152,22 +152,39 @@ const handleReplySubmit = async (comment) => {
     content: comment.replyContent,
     userId: 'ssafy',
     boardNo: currentBoardNo,
-    parentNo: comment.id + "" || comment.no +""
+    parentNo: comment.no
   }
   console.log(param)
+  console.log(comment)
 
 
   await registReply(param,
       (res) => {
         console.log(res)
-        comment.children.push({
+
+        const newReplyComment = {
           no: res.data.result.result,
-          id : res.data.result.result,
+          id: res.data.result.result,
           content: comment.replyContent,
           userId: 'ssafy',
           children: [],
           replying: false,
-        });
+        };
+
+        if(!comment.hasOwnProperty("children")){
+          comment.children = [];
+        }
+        comment.children.push(newReplyComment)
+
+        //
+        // comment.children.push({
+        //   no: res.data.result.result,
+        //   id : res.data.result.result,
+        //   content: comment.replyContent,
+        //   userId: 'ssafy',
+        //   children: [],
+        //   replying: false,
+        // });
         comment.replying = false;
         message.success('답글이 성공적으로 추가되었습니다.');
       }

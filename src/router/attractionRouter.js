@@ -1,5 +1,6 @@
 import AttractionView from '@/views/AttractionView.vue'
 import AttractionList from '@/components/attraction/AttractionList.vue'
+import AttractionListView from "@/views/AttractionListView.vue";
 
 const attractionRouter = [
   {
@@ -11,7 +12,7 @@ const attractionRouter = [
       {
         path: 'list',
         name: 'attraction-list',
-        component: AttractionList
+        component: AttractionListView
       },
     ]
   }

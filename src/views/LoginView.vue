@@ -9,18 +9,18 @@
     </div>
     <div class="login-container">
       <a-form
-          :model="formState"
+          :model="loginUser"
           name="normal_login"
           class="login-form"
           @finish="onFinish"
           @finishFailed="onFinishFailed"
       >
         <a-form-item
-            label="Username"
-            name="username"
+            label="UsreId"
+            name="userId"
             :rules="[{ required: true, message: 'Please input your username!' }]"
         >
-          <a-input v-model:value="formState.username">
+          <a-input v-model:value="loginUser.userId">
             <template #prefix>
               <UserOutlined class="site-form-item-icon" />
             </template>
@@ -28,11 +28,11 @@
         </a-form-item>
 
         <a-form-item
-            label="Password"
-            name="password"
+            label="UserPassword"
+            name="userPassword"
             :rules="[{ required: true, message: 'Please input your password!' }]"
         >
-          <a-input-password v-model:value="formState.password">
+          <a-input-password v-model:value="loginUser.userPassword">
             <template #prefix>
               <LockOutlined class="site-form-item-icon" />
             </template>
@@ -41,7 +41,7 @@
 
         <a-form-item>
           <a-form-item name="remember" no-style>
-            <a-checkbox v-model:checked="formState.remember">Remember me</a-checkbox>
+            <a-checkbox v-model:checked="loginUser.remember">Remember me</a-checkbox>
           </a-form-item>
           <a class="login-form-forgot" href="">Forgot password</a>
         </a-form-item>
@@ -62,19 +62,21 @@
 <script setup>
 import { reactive, computed } from 'vue';
 import CustomBreadCrumb from "@/views/CustomBreadCrumb.vue";
-const formState = reactive({
-  username: '',
-  password: '',
+const loginUser = reactive({
+  userId: '',
+  userPassword: '',
   remember: true,
 });
 const onFinish = values => {
+  console.log(loginUser)
+
   console.log('Success:', values);
 };
 const onFinishFailed = errorInfo => {
   console.log('Failed:', errorInfo);
 };
 const disabled = computed(() => {
-  return !(formState.username && formState.password);
+  return !(loginUser.userId && loginUser.userPassword);
 });
 
 </script>

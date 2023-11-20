@@ -1,62 +1,40 @@
 <template>
-  <div className="toast-edit" ref="editor"></div>
+  <div ref="editor"/>
 </template>
 
 <script setup>
-import "prismjs/themes/prism.css";
-import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
-import "tui-color-picker/dist/tui-color-picker.css";
-import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
-
-import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-import Prism from "prismjs";
-import "prismjs/components/prism-c";
-import "prismjs/components/prism-cpp";
-import "prismjs/components/prism-java";
-import "prismjs/components/prism-python";
-import "@toast-ui/editor/dist/i18n/ko-kr";
-import Editor from "@toast-ui/editor";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
-import {onMounted, ref, watch, defineEmits} from "vue";
-import "@toast-ui/editor/dist/toastui-editor.css";
+import {onMounted, ref, watch, onUnmounted} from 'vue';
+import Editor from '@toast-ui/editor';
+import '@toast-ui/editor/dist/toastui-editor.css';
 import axios from "axios";
 
-const props = defineProps(["data"]);
-const editor = ref(null);
-const changedPrism = ref(Prism);
-const emit = defineEmits(["setContent"])
-
-onMounted(() => {
-  console.log(props.data)
-  setEditor();
-  if (props.data) {
-    try {
-      editor.value.setMarkdown(props.data);
-    } catch (e) {
-      editor.value.setHTML(props.data);
-    }
-  }
+const props = defineProps({
+  data: {
+    type: String,
+    required: false,
+    default: '',
+  },
 });
 
-const setEditor = () => {
-  editor.value = new Editor({
+const emit = defineEmits(['setContent']);
+const editor = ref();
+const editorHolder = ref();
+
+//마운트될때 Editor 생성
+onMounted(() => {
+  editorHolder.value = new Editor({
     el: editor.value,
-    plugins: [
-      colorSyntax,
-      [codeSyntaxHighlight, {highlighter: changedPrism.value}],
-    ],
-    initialEditType: "markdown",
-    language: "ko",
-    events: {
-      change: onChangeEditor,
-    },
+    height: '500px',
+    initialEditType: 'markdown',
+    initialValue : props.data,
     hooks: {
       addImageBlobHook: uploadImage,
     },
-    initialValue : props.data,
-    height: '500px',
+    events: {
+      change: () => emit('setContent', editorHolder.value.getMarkdown()),
+    },
   });
-};
+});
 
 async function uploadImage(blob, callback) {
   const formData = new FormData();
@@ -77,31 +55,5 @@ async function uploadImage(blob, callback) {
       });
 }
 
-const onChangeEditor = () => {
-  editorText.value = editor.value.getMarkdown();
-};
-
-watch(
-    () => props.data,
-    (newValue) => {
-      if (editorText.value !== newValue) {
-        editor.value.setMarkdown(newValue);
-      }
-    }
-);
-
-const editorText = ref(null);
-
-watch(
-    () => editorText.value,
-    (newValue, oldValue) => {
-      if (newValue !== oldValue) {
-        emit("setContent", editor.value.getMarkdown());
-      }
-    }
-);
+//작성한 내용 불러와서 html 적용
 </script>
-
-<style>
-/* Add your styles here if needed */
-</style>

@@ -26,8 +26,9 @@ import MarkdownEditor from "@/components/common/editor/editor.vue"
 import {postBoard} from "@/api/boardApi"
 import router from "@/router";
 
-const content = ref('');
 const formRef = ref();
+
+const content = ref("");
 
 const setContent = (e) => {
   content.value = e;
@@ -71,6 +72,10 @@ const onSubmit = () => {
         console.log('error', error);
       });
 };
+
+watch(content, (newValue, oldValue) => {
+
+});
 
 const moveList = () => {
   router.push({name : 'tripInfoSharing'})

@@ -30,7 +30,7 @@
         <a-button style="margin-top: 10px; margin-left: 10px" @click="moveList">목록</a-button>
       </a-form-item>
 
-      <a-collapse accordion class="scrollable-reply" style="max-height: 300px">
+      <a-collapse accordion class="scrollable-reply" style="max-height: 250px">
         <a-collapse-panel key="1" header="댓글">
           <CommentList v-if="replyIsLoaded" :comments="replies"/>
         </a-collapse-panel>
@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import MarkdownViewer from "@/components/common/editor/viewer.vue";
 import {detailBoard, deleteBoard} from "@/api/boardApi";
 import {listReply, registReply} from "@/api/replyApi"
@@ -72,10 +72,6 @@ const contentIsLoaded = ref(false);
 const replyIsLoaded = ref(false);
 const boardId = ref(null)
 const submitting = ref(false)
-
-
-
-
 
 import { provide } from 'vue'
 import {message} from "ant-design-vue";
@@ -142,7 +138,7 @@ const handleSubmit = async () => {
   console.log(reply.value)
 
   await registReply(reply.value, (res) => {
-    const idx = res.data.result;
+    const idx = res.data.result.result;
     const newComment = {
       no : idx,
       content : reply.value.content,
@@ -154,6 +150,10 @@ const handleSubmit = async () => {
     reply.value.content = null
   }, fail)
 }
+
+watch(replies.value, (newvalue, oldvalue) => {
+  console.log(newvalue)
+})
 
 const moveEdit = () => {
   router.push({ name: 'tripInfoSharing-modify', params: { articleno: boardId.value }})
