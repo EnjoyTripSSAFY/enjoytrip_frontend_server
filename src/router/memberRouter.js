@@ -1,3 +1,23 @@
+import { storeToRefs } from 'pinia'
+import { useMemberStore } from '@/stores/member'
+
+const onlyAuthUser = async (to, from, next) => {
+  const memberStore = useMemberStore()
+  const { userInfo, isValidToken } = storeToRefs(memberStore)
+  const { getUserInfo } = memberStore
+
+  let token = sessionStorage.getItem('access-token')
+
+  if (userInfo.value != null && token) {
+    await getUserInfo(token)
+  }
+  if (!isValidToken.value || userInfo.value === null) {
+    next({ name: 'user-login' })
+  } else {
+    next()
+  }
+}
+
 const memberRouter = [
   {
     path: '/login',
@@ -9,6 +29,12 @@ const memberRouter = [
     path: '/register',
     name: 'register',
     component: () => import('@/views/RegisterView.vue')
+  },
+  {
+    path: '/mypage',
+    name: 'user-mypage',
+    beforeEnter: onlyAuthUser,
+    component: () => import('@/components/users/UserMyPage.vue')
   }
 ]
 

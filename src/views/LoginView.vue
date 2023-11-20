@@ -1,24 +1,23 @@
 <template>
-
   <div class="base-container">
     <div class="logo-container">
-      <h1 style="font-size: 60px"> Login </h1>
+      <h1 style="font-size: 60px">Login</h1>
     </div>
     <div class="logo-container">
-      <img src="@/assets/logo.svg" alt="Logo" width="160" height="160"/>
+      <img src="@/assets/logo.svg" alt="Logo" width="160" height="160" />
     </div>
     <div class="login-container">
       <a-form
-          :model="loginUser"
-          name="normal_login"
-          class="login-form"
-          @finish="onFinish"
-          @finishFailed="onFinishFailed"
+        :model="loginUser"
+        name="normal_login"
+        class="login-form"
+        @finish="onFinish"
+        @finishFailed="onFinishFailed"
       >
         <a-form-item
-            label="UsreId"
-            name="userId"
-            :rules="[{ required: true, message: 'Please input your username!' }]"
+          label="UserId"
+          name="userId"
+          :rules="[{ required: true, message: 'Please input your Id!' }]"
         >
           <a-input v-model:value="loginUser.userId">
             <template #prefix>
@@ -28,11 +27,11 @@
         </a-form-item>
 
         <a-form-item
-            label="UserPassword"
-            name="userPassword"
-            :rules="[{ required: true, message: 'Please input your password!' }]"
+          label="Password"
+          name="userPwd"
+          :rules="[{ required: true, message: 'Please input your password!' }]"
         >
-          <a-input-password v-model:value="loginUser.userPassword">
+          <a-input-password v-model:value="loginUser.userPwd">
             <template #prefix>
               <LockOutlined class="site-form-item-icon" />
             </template>
@@ -47,7 +46,7 @@
         </a-form-item>
 
         <a-form-item>
-          <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button">
+          <a-button :disabled="disabled" type="primary" class="login-form-button" @click="login">
             Log in
           </a-button>
           Or
@@ -56,40 +55,74 @@
       </a-form>
     </div>
   </div>
-
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue';
-import CustomBreadCrumb from "@/views/CustomBreadCrumb.vue";
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+import { useMemberStore } from '@/stores/member'
+import { useMenuStore } from '@/stores/menu'
+import { ref, reactive, computed } from 'vue'
+
+const router = useRouter()
+const memberStore = useMemberStore()
+
+const { isLogin } = storeToRefs(memberStore)
+const { userLogin, getUserInfo } = memberStore
+const { changeMenuState } = useMenuStore()
+
+// const loginUser = reactive({
+//   username: '',
+//   password: '',
+//   remember: true
+// })
+
+const userId = ref('')
+const userPwd = ref('')
+const remember = ref(true)
+
 const loginUser = reactive({
-  userId: '',
-  userPassword: '',
-  remember: true,
-});
-const onFinish = values => {
-  console.log(loginUser)
+  userId: userId.value,
+  userPwd: userPwd.value,
+  remember: remember.value
+})
 
-  console.log('Success:', values);
-};
-const onFinishFailed = errorInfo => {
-  console.log('Failed:', errorInfo);
-};
+const login = async () => {
+  console.log('data : ' + loginUser.value)
+  await userLogin(loginUser.value)
+  let token = sessionStorage.getItem('access-token')
+  if (isLogin) {
+    getUserInfo(token)
+    changeMenuState()
+  }
+  router.push('/')
+}
+
+// const formState = reactive({
+//   username: '',
+//   password: '',
+//   remember: true
+// })
+
+const onFinish = (values) => {
+  console.log('Success:', values)
+}
+const onFinishFailed = (errorInfo) => {
+  console.log('Failed:', errorInfo)
+}
 const disabled = computed(() => {
-  return !(loginUser.userId && loginUser.userPassword);
-});
-
+  return !(loginUser.userId && loginUser.userPwd)
+})
 </script>
 
 <style scoped>
 .base-container {
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   align-items: stretch;
   justify-content: center;
   height: 70vh; /* 화면 전체 높이에 따라 중앙에 배치 */
 }
-
 
 .logo-container {
   display: flex;
@@ -102,7 +135,7 @@ const disabled = computed(() => {
   flex-direction: row-reverse;
   align-items: center;
   justify-content: center;
-  //height: 70vh; /* 화면 전체 높이에 따라 중앙에 배치 */
+  /* height: 70vh; 화면 전체 높이에 따라 중앙에 배치 */
 }
 
 #components-form-demo-normal-login .login-form {
@@ -114,7 +147,4 @@ const disabled = computed(() => {
 #components-form-demo-normal-login .login-form-button {
   width: 100%;
 }
-
-/* 필요한 스타일을 추가하세요. */
 </style>
-
