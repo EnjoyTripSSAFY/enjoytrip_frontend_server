@@ -19,13 +19,15 @@ export const useMemberStore = defineStore('memberStore', () => {
     await userConfirm(
       { ...loginUser },
       (response) => {
-        if (response.status === httpStatusCode.CREATE) {
+        if (response.status === httpStatusCode.OK) {
           let { data } = response
-          let accessToken = data['access-token']
-          let refreshToken = data['refresh-token']
+          let accessToken = data['result']['accessToken']
+          let refreshToken = data['result']['refreshToken']
           isLogin.value = true
           isLoginError.value = false
           isValidToken.value = true
+          userInfo.value = {user : data['result']['info']['user'] , role : "User"}
+          console.log(userInfo.value, isLogin.value)
           sessionStorage.setItem('access-token', accessToken)
           sessionStorage.setItem('refresh-token', refreshToken)
         } else {
@@ -40,26 +42,26 @@ export const useMemberStore = defineStore('memberStore', () => {
     )
   }
 
-  const getUserInfo = (token) => {
+  const getUserInfo = async (token) => {
     let decodeToken = jwtDecode(token)
-    findById(
-      decodeToken.userId,
-      (response) => {
-        if (response.status === httpStatusCode.OK) {
-          userInfo.value = response.data.userInfo
-        } else {
-          console.log('유저 정보 없음!!!!')
-        }
-      },
-      async (error) => {
-        console.error(
-          'getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ',
-          error.response.status
-        )
-        isValidToken.value = false
+    await findById(
+        decodeToken.userId,
+        (response) => {
+          if (response.status === httpStatusCode.OK) {
+            userInfo.value = response.data.userInfo
+          } else {
+            console.log('유저 정보 없음!!!!')
+          }
+        },
+        async (error) => {
+          console.error(
+              'getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ',
+              error.response.status
+          )
+          isValidToken.value = false
 
-        await tokenRegenerate()
-      }
+          await tokenRegenerate()
+        }
     )
   }
 

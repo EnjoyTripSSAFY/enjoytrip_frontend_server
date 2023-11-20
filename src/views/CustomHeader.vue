@@ -17,17 +17,17 @@
 
       <a-col :span="2" style="text-align: right">
         <a-menu mode="horizontal" :theme="menuTheme" :selected-keys="[currentMenu]" >
-          <a-sub-menu v-if="!isLoggedIn" key="loginMenu" title="Login/Signup">
+          <a-sub-menu v-if="!isLogin" key="loginMenu" title="Login/Signup">
             <a-menu-item key="signup" @click="moveLogin">Login</a-menu-item>
             <a-menu-item key="login" @click="moveRegister">Signup</a-menu-item>
           </a-sub-menu>
 
-          <a-sub-menu v-if="isLoggedIn && userRole === 'user'" key="userMenu" :title="username">
+          <a-sub-menu v-else-if="isLogin && userInfo.role === 'User'" key="userMenu" :title="userInfo.user">
             <a-menu-item key="myPage">My Page</a-menu-item>
             <a-menu-item key="logout" @click="">Logout</a-menu-item>
           </a-sub-menu>
 
-          <a-sub-menu v-if="isLoggedIn && userRole === 'admin'" key="adminMenu" :title="username">
+          <a-sub-menu v-if="isLogin && userInfo.role === 'Admin'" key="adminMenu" :title="userInfo.user">
             <a-menu-item key="myPage">My Page</a-menu-item>
             <a-menu-item key="admin">Admin</a-menu-item>
             <a-menu-item key="logout" @click="">Logout</a-menu-item>
@@ -45,16 +45,15 @@
 }
 </style>
 <script setup>
-import {h, reactive, ref, watch} from 'vue';
-import { useRouter } from 'vue-router'
-import {UserOutlined} from "@ant-design/icons-vue";
+import {ref} from 'vue';
+import {useRouter} from 'vue-router'
+import {useMemberStore} from "@/stores/member";
+import {storeToRefs} from "pinia";
 
+
+const { isLogin, userInfo } = storeToRefs(useMemberStore())
 const menuTheme = ref('light') // or 'light'
 const currentMenu = ref('home')
-const isLoggedIn = ref(false)
-const username = ref('johnDoe') // Replace with actual username
-const userRole = ref('admin')
-
 
 const router = useRouter()
 
