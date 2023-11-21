@@ -94,12 +94,12 @@ const formState = reactive({
 const onFinish = async (values) => {
   await userLogin(values)
   let token = sessionStorage.getItem('access-token')
-  console.log('isLogin : ' + isLogin)
+  console.log('isLogin : ' + isLogin.value)
   if (isLogin) {
     getUserInfo(token)
-    changeMenuState()
+    // changeMenuState()
   }
-  router.push({ name: 'home' })
+  await router.push({name: 'home'})
 }
 
 // const login = async () => {

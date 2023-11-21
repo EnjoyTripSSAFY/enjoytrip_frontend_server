@@ -19,7 +19,7 @@ export const useMemberStore = defineStore('memberStore', () => {
     await userConfirm(
       { ...loginUser },
       (response) => {
-        if (response.status === httpStatusCode.OK) {
+        if (response.status === httpStatusCode.CREATE) {
           let { data } = response
           let accessToken = data['result']['accessToken']
           let refreshToken = data['result']['refreshToken']
@@ -44,6 +44,8 @@ export const useMemberStore = defineStore('memberStore', () => {
 
   const getUserInfo = async (token) => {
     let decodeToken = jwtDecode(token)
+    console.log(decodeToken)
+
     await findById(
         decodeToken.userId,
         (response) => {
