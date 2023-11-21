@@ -3,7 +3,7 @@ import MyPlanDetailSubHeader from './items/MyPlanDetailSubHeader.vue'
 import { onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { listPlanPerDateAndDetail } from '@/api/planApi'
-import { dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 
 const route = useRoute()
 const planPerDate = ref([])
@@ -26,7 +26,11 @@ onMounted(async () => {
 })
 
 const parseDate = (dp) => {
-  return dayjs(dp).format('YYYY-MM')
+  return dayjs(dp).format('YYYY-MM-DD')
+}
+
+const parseDateToTime = (dp) => {
+  return dayjs(dp).format('HH-mm')
 }
 
 const contentStyle = {
@@ -41,17 +45,17 @@ const contentStyle = {
       <MyPlanDetailSubHeader />
       <a-layout-content :style="contentStyle">
         <div v-for="ppd in planPerDate" :key="ppd.no">
-          <h1>계획 날짜 : {{ ppd.planTime }}</h1>
+          <a-divider orientation="left">계획 날짜 : {{ parseDate(ppd.planTime) }}</a-divider>
           <div v-for="dp in ppd.detailPlans" :key="dp.no">
             <a-descriptions title="N 번째 계획" bordered>
               <a-descriptions-item label="관광지 명">{{ dp.attractionName }}</a-descriptions-item>
               <a-descriptions-item label="비용">{{ dp.cost }}</a-descriptions-item>
               <a-descriptions-item label="시작 시간" :span="2">
-                {{ parseDate(dp.startTime) }}
+                {{ parseDateToTime(dp.startTime) }}
               </a-descriptions-item>
-              <a-descriptions-item label="끝난 시간" :span="2">{{
-                dp.endTime
-              }}</a-descriptions-item>
+              <a-descriptions-item label="끝난 시간" :span="2">
+                {{ parseDateToTime(dp.endTime) }}
+              </a-descriptions-item>
               <a-descriptions-item label="Config Info">
                 컨텐츠 정보1
                 <br />
