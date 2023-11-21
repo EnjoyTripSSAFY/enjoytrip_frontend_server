@@ -13,7 +13,7 @@ const myPlanRouter = [
         component: MyPlanList
       },
       {
-        path: 'detail',
+        path: 'detail/:tripPlanNo',
         name: 'myPlan-detail',
         component: () => import('@/components/myPlan/MyPlanDetail.vue')
       }

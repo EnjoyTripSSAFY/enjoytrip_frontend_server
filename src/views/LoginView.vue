@@ -76,20 +76,11 @@ const { isLogin } = storeToRefs(memberStore)
 const { userLogin, getUserInfo } = memberStore
 const { changeMenuState } = useMenuStore()
 
-// const loginUser = reactive({
-//   username: '',
-//   password: '',
-//   remember: true
-// })
-
 const formState = reactive({
   userId: '',
   userPassword: '',
   remember: true
 })
-// const onFinish = (values) => {
-//   console.log('Success:', values)
-// }
 
 const onFinish = async (values) => {
   await userLogin(values)
@@ -99,19 +90,8 @@ const onFinish = async (values) => {
     getUserInfo(token)
     // changeMenuState()
   }
-  await router.push({name: 'home'})
+  await router.push({ name: 'home' })
 }
-
-// const login = async () => {
-//   console.log('data : ' + loginUser.value)
-//   await userLogin(loginUser.value)
-//   let token = sessionStorage.getItem('access-token')
-//   if (isLogin) {
-//     getUserInfo(token)
-//     changeMenuState()
-//   }
-//   router.push('/')
-// }
 
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo)

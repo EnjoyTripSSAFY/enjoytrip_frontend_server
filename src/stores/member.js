@@ -19,14 +19,14 @@ export const useMemberStore = defineStore('memberStore', () => {
     await userConfirm(
       { ...loginUser },
       (response) => {
-        if (response.status === httpStatusCode.OK) {
-          let { data } = response
+        let { data } = response
+        if (data['httpStatus'] === 'CREATED') {
           let accessToken = data['result']['accessToken']
           let refreshToken = data['result']['refreshToken']
           isLogin.value = true
           isLoginError.value = false
           isValidToken.value = true
-          userInfo.value = {user : data['result']['info']['user'] , role : "User"}
+          userInfo.value = { user: data['result']['info']['user'], role: 'User' }
           console.log(userInfo.value, isLogin.value)
           sessionStorage.setItem('access-token', accessToken)
           sessionStorage.setItem('refresh-token', refreshToken)
@@ -47,23 +47,24 @@ export const useMemberStore = defineStore('memberStore', () => {
     console.log(decodeToken)
 
     await findById(
-        decodeToken.userId,
-        (response) => {
-          if (response.status === httpStatusCode.OK) {
-            userInfo.value = response.data.userInfo
-          } else {
-            console.log('유저 정보 없음!!!!')
-          }
-        },
-        async (error) => {
-          console.error(
-              'getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ',
-              error.response.status
-          )
-          isValidToken.value = false
-
-          await tokenRegenerate()
+      decodeToken.userId,
+      (response) => {
+        let { data } = response
+        if (data['httpStatus'] === 'OK') {
+          userInfo.value = response.data.userInfo
+        } else {
+          console.log('유저 정보 없음!!!!')
         }
+      },
+      async (error) => {
+        console.error(
+          'getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ',
+          error.response.status
+        )
+        isValidToken.value = false
+
+        await tokenRegenerate()
+      }
     )
   }
 
@@ -71,8 +72,9 @@ export const useMemberStore = defineStore('memberStore', () => {
     await tokenRegeneration(
       JSON.stringify(userInfo.value),
       (response) => {
-        if (response.status === httpStatusCode.CREATE) {
-          let accessToken = response.data['access-token']
+        let { data } = response
+        if (data['httpStatus'] === 'CREATED') {
+          let accessToken = data['result']['accessToken']
           sessionStorage.setItem('access-token', accessToken)
           isValidToken.value = true
         }
@@ -84,7 +86,8 @@ export const useMemberStore = defineStore('memberStore', () => {
           await logout(
             userInfo.value.userid,
             (response) => {
-              if (response.status === httpStatusCode.OK) {
+              let { data } = response
+              if (data['httpStatus'] === 'OK') {
                 console.log('리프레시 토큰 제거 성공')
               } else {
                 console.log('리프레시 토큰 제거 실패')
@@ -93,7 +96,7 @@ export const useMemberStore = defineStore('memberStore', () => {
               isLogin.value = false
               userInfo.value = null
               isValidToken.value = false
-              router.push({ name: 'user-login' })
+              router.push({ name: 'login' })
             },
             (error) => {
               console.error(error)
@@ -110,7 +113,8 @@ export const useMemberStore = defineStore('memberStore', () => {
     await logout(
       userid,
       (response) => {
-        if (response.status === httpStatusCode.OK) {
+        let { data } = response
+        if (data['httpStatus'] === 'OK') {
           isLogin.value = false
           userInfo.value = null
           isValidToken.value = false
