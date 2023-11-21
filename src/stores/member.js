@@ -19,7 +19,7 @@ export const useMemberStore = defineStore('memberStore', () => {
     await userConfirm(
       { ...loginUser },
       (response) => {
-        if (response.status === httpStatusCode.CREATE) {
+        if (response.status === httpStatusCode.OK) {
           let { data } = response
           let accessToken = data['result']['accessToken']
           let refreshToken = data['result']['refreshToken']

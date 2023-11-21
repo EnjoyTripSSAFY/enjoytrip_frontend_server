@@ -5,18 +5,21 @@
 </template>
 
 <script setup>
-import { tripInfoStore } from '@/stores/tripInfoStore'
-import { storeToRefs } from 'pinia'
-import { onMounted, ref, watch, watchEffect } from 'vue'
-import { getLocalTripData } from '@/api/tripApi'
+import {tripInfoStore} from '@/stores/tripInfoStore'
+import {storeToRefs} from 'pinia'
+import {onMounted, ref, watch, watchEffect} from 'vue'
+import {kakaoMapPosStore} from "@/stores/kakaoMapPosStore";
+
 
 var map = null
+var overlay = null
 const positions = ref([])
 const markers = ref([])
 
 const attractionInform = ref()
 const tripinfoStore = tripInfoStore()
-const { selectedState, selectedCity, selectedType, selectedPgno } = storeToRefs(tripinfoStore)
+const {responseData} = storeToRefs(tripinfoStore)
+const {currentPos} = storeToRefs(kakaoMapPosStore())
 
 onMounted(() => {
   if (window.kakao && window.kakao.maps) {
@@ -43,24 +46,63 @@ const initMap = () => {
 
 watchEffect(() => {
   ;(async () => {
-    attractionInform.value = await getLocalTripData(
-      selectedState.value,
-      selectedCity.value,
-      selectedType.value,
-      selectedPgno.value
-    )
-
+    // Use responseData.value instead of attractionInform.value
     positions.value = []
-    attractionInform.value.forEach((attraction) => {
-      let obj = {}
-      obj.latlng = new kakao.maps.LatLng(attraction.mapy, attraction.mapx)
-      obj.title = attraction.title
 
-      positions.value.push(obj)
-    })
-    loadMarkers()
+    const data = await responseData.value;
+
+    if (data) {
+      data.forEach((attraction) => {
+        let obj = {}
+        obj.latlng = new kakao.maps.LatLng(attraction.mapy, attraction.mapx)
+        obj.title = attraction.title
+
+        positions.value.push(obj)
+      })
+      loadMarkers()
+    }
   })()
 })
+
+watch(currentPos, (newPos, oldPos) => {
+  const moveLatLon = new kakao.maps.LatLng(newPos.longitude, newPos.latitude);
+  map.setCenter(moveLatLon);
+
+  if(overlay != undefined) overlay.setMap(null);
+
+  var content = '<div class="wrap">' +
+      '    <div class="info">' +
+      '        <div class="title">' +
+      '            카카오 스페이스닷원' +
+      '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+      '        </div>' +
+      '        <div class="body">' +
+      '            <div class="img">' +
+      '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
+      '           </div>' +
+      '            <div class="desc">' +
+      '                <div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>' +
+      '                <div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
+      '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' +
+      '            </div>' +
+      '        </div>' +
+      '    </div>' +
+      '</div>';
+
+
+  // 마커 위에 커스텀오버레이를 표시합니다
+  // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
+  overlay = new kakao.maps.CustomOverlay({
+    content: content,
+    map: map,
+    position: moveLatLon
+  });
+  overlay.setMap(map);
+
+
+},);
+
+
 
 const loadMarkers = () => {
   // 현재 표시되어있는 marker들이 있다면 map에 등록된 marker를 제거한다.
@@ -88,8 +130,8 @@ const loadMarkers = () => {
   // 4. 지도를 이동시켜주기
   // 배열.reduce( (누적값, 현재값, 인덱스, 요소)=>{ return 결과값}, 초기값);
   const bounds = positions.value.reduce(
-    (bounds, position) => bounds.extend(position.latlng),
-    new kakao.maps.LatLngBounds()
+      (bounds, position) => bounds.extend(position.latlng),
+      new kakao.maps.LatLngBounds()
   )
 
   map.setBounds(bounds)
@@ -100,11 +142,33 @@ const deleteMarkers = () => {
     markers.value.forEach((marker) => marker.setMap(null))
   }
 }
+
+window.closeOverlay = function() {
+  if (overlay) {
+    overlay.setMap(null);
+  }
+};
 </script>
 
-<style>
+<style scoped>
 .map {
   width: 100%;
   height: 75vh;
 }
+</style>
+<style>
+.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+.wrap * {padding: 0;margin: 0;}
+.wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+.wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+.info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+.info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+.info .close:hover {cursor: pointer;}
+.info .body {position: relative;overflow: hidden;}
+.info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
+.desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
+.info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
+.info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+.info .link {color: #5085BB;}
 </style>
