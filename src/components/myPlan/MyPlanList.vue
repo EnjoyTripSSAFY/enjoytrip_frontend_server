@@ -6,6 +6,7 @@ import MyPlanCard from '@/components/myPlan/items/MyPlanCard.vue'
 import { onMounted, reactive, ref, watch } from 'vue'
 import { listTripPlan } from '@/api/planApi'
 import { useRoute, useRouter } from 'vue-router'
+import dayjs from 'dayjs'
 
 const router = useRouter()
 const tripPlan = ref([])
@@ -30,6 +31,10 @@ onMounted(async () => {
   )
 })
 
+const parseDate = (dp) => {
+  return dayjs(dp).format('YYYY-MM-DD')
+}
+
 const contentStyle = {
   minHeight: 120,
   lineHeight: '100px'
@@ -49,7 +54,7 @@ const contentStyle = {
               ></template
             >
             <p>내용 : {{ tp.describ }}</p>
-            <p>생성 일자 : {{ tp.createdTime }}</p>
+            <p>생성 일자 : {{ parseDate(tp.createdTime) }}</p>
           </a-card>
         </div>
       </a-layout-content>
