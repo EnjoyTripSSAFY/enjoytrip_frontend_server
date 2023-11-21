@@ -64,6 +64,7 @@ onMounted(async () => {
   if(selectedState.value){
     cityList.value = await getCityData(selectedState.value)
   }
+
 })
 
 watch(
