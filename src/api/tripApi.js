@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiKey =
-  'EhsL2PizQkAMwfRZnxwOXyTGMnkf7aDQsYEuNe6wEAWau3Fo3iTcRgtKE3HZTD0%2F8cCBwvUmGsTerjWWKNT0mA%3D%3D'
+  'EhsL2PizQkAMwfRZnxwOXyTGMnkf7aDQsYEuNe6wEAWau3Fo3iTcRgtKE3HZTD0/8cCBwvUmGsTerjWWKNT0mA=='
 const endPoint = 'https://apis.data.go.kr/B551011/KorService1/'
 
 const getURL = (baseUrl, queryParams) => {
@@ -12,8 +12,8 @@ const getURL = (baseUrl, queryParams) => {
   return `${baseUrl}?${queryString}`
 }
 
-const getRequest = async (finalUrl) => {
-  return await axios.get(finalUrl)
+const getRequest = async (baseUrl, queryParams) => {
+  return await axios.get(baseUrl, { params: queryParams })
       .then((res) => {
         if (!res.data || !res.data.response || !res.data.response.body) {
           throw new Error('Network response was not ok');
@@ -38,8 +38,7 @@ const getStateData = () => {
     serviceKey: apiKey
   }
 
-  const finalUrl = getURL(baseUrl, queryParams)
-  return getRequest(finalUrl)
+  return getRequest(baseUrl, queryParams)
 }
 
 const getCityData = (city) => {
@@ -56,8 +55,8 @@ const getCityData = (city) => {
     serviceKey: apiKey
   }
 
-  const finalUrl = getURL(baseUrl, queryParams)
-  return getRequest(finalUrl)
+  // const finalUrl = getURL(baseUrl, queryParams)
+  return getRequest(baseUrl, queryParams)
 }
 
 const getLocalTripData = async (state, city, type, pageno, pageSize) => {
@@ -78,8 +77,8 @@ const getLocalTripData = async (state, city, type, pageno, pageSize) => {
     serviceKey: apiKey
   }
 
-  const finalUrl = getURL(baseUrl, queryParams)
-  return getRequest(finalUrl)
+  // const finalUrl = getURL(baseUrl, queryParams)
+  return getRequest(baseUrl, queryParams)
 }
 
 export { getCityData, getStateData, getLocalTripData }

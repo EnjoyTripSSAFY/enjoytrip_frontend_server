@@ -175,8 +175,9 @@ const confirm = (e) => {
     (res) => {
       message.success('Click on Yes')
       router.replace({ name: 'tripInfoSharing' })
-    },
-    message.warn('게시글 삭제를 실패하였습니다.')
+    },(err) => {
+        message.warn('게시글 삭제를 실패하였습니다.')
+      }
   )
 }
 const cancel = (e) => {}

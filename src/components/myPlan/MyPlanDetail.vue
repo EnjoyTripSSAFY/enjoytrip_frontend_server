@@ -3,7 +3,7 @@ import MyPlanDetailSubHeader from './items/MyPlanDetailSubHeader.vue'
 import { onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { listPlanPerDateAndDetail } from '@/api/planApi'
-import { dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 
 const route = useRoute()
 const planPerDate = ref([])

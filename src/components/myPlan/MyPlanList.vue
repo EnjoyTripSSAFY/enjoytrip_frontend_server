@@ -41,16 +41,19 @@ const contentStyle = {
     <a-layout>
       <MyPlanListSubHeader />
       <a-layout-content :style="contentStyle">
-        <div v-for="tp in tripPlan" :key="tp.no">
-          <a-card :title="tp.title" style="width: 300px">
-            <template #extra
-              ><router-link :to="{ name: 'myPlan-detail', params: { tripPlanNo: tp.no } }"
-                >detail</router-link
-              ></template
-            >
-            <p>내용 : {{ tp.describ }}</p>
-            <p>생성 일자 : {{ tp.createdTime }}</p>
-          </a-card>
+        <div>
+          <a-row :gutter="16">
+            <a-col :span="6" v-for="(tp, index) in tripPlan" :key="tp.no">
+              <a-card :title="tp.title" style="width: 300px">
+                <template #extra>
+                  <router-link :to="{ name: 'myPlan-detail', params: { tripPlanNo: tp.no } }">detail
+                  </router-link>
+                </template>
+                <p>내용 : {{ tp.describ }}</p>
+                <p>생성 일자 : {{ tp.createdTime }}</p>
+              </a-card>
+            </a-col>
+          </a-row>
         </div>
       </a-layout-content>
     </a-layout>

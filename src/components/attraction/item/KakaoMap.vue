@@ -67,27 +67,30 @@ watchEffect(() => {
 watch(currentPos, (newPos, oldPos) => {
   const moveLatLon = new kakao.maps.LatLng(newPos.longitude, newPos.latitude);
   map.setCenter(moveLatLon);
+  map.setLevel(newPos.mlevel)
 
   if(overlay != undefined) overlay.setMap(null);
-
-  var content = '<div class="wrap">' +
-      '    <div class="info">' +
-      '        <div class="title">' +
-      '            카카오 스페이스닷원' +
-      '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
-      '        </div>' +
-      '        <div class="body">' +
-      '            <div class="img">' +
-      '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
-      '           </div>' +
-      '            <div class="desc">' +
-      '                <div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>' +
-      '                <div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
-      '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' +
-      '            </div>' +
-      '        </div>' +
-      '    </div>' +
-      '</div>';
+  newPos.image = newPos.image ? newPos.image : "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png"
+  var content = `<div class="wrap">
+    <div class="info">
+        <div class="title">
+            ${newPos.title}
+            <div class="close" onclick="closeOverlay()" title="닫기"></div>
+        </div>
+        <div class="body">
+            <div class="img">
+                <img src="${newPos.image}" width="73" height="70">
+            </div>
+            <div class="desc">
+                <div class="ellipsis">${newPos.addr1}</div>
+                <div class="jibun ellipsis">${newPos.addr2}</div>
+                <a href=https://search.naver.com/search.naver?where=view&sm=tab_jum&query=${newPos.title}>
+                    <img width="20px" height="20px" src="https://littledeep.com/wp-content/uploads/2020/09/naver-icon-style.png" target="_blank" class="link">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>`;
 
 
   // 마커 위에 커스텀오버레이를 표시합니다
@@ -157,9 +160,9 @@ window.closeOverlay = function() {
 }
 </style>
 <style>
-.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+.wrap {position: absolute;left: 0;bottom: 40px;width: 400px;height: 200px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
 .wrap * {padding: 0;margin: 0;}
-.wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+.wrap .info {;width: 400px;height: 200px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
 .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
 .info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
 .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}

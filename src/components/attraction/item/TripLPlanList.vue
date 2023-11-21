@@ -25,7 +25,6 @@
         show-size-changer
         :total="totalSize"
         @showSizeChange="onShowSizeChange"
-        :show-total="total => `Total ${total} items`"
     />
   </a-card>
 </template>

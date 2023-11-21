@@ -18,7 +18,7 @@ import TripList from "@/components/attraction/item/TripList.vue";
         <KakaoMap/>
       </a-col>
       <a-col :span="12">
-        <TripList style="width: 100%; max-height: 75vh; overflow-y: scroll"/>
+        <TripList style="width: 100%; height:75vh; max-height: 75vh; overflow-y: scroll"/>
       </a-col>
     </a-row>
   </div>
