@@ -26,7 +26,11 @@ onMounted(async () => {
 })
 
 const parseDate = (dp) => {
-  return dayjs(dp).format('YYYY-MM')
+  return dayjs(dp).format('YYYY-MM-DD')
+}
+
+const parseDateToTime = (dp) => {
+  return dayjs(dp).format('HH-mm')
 }
 
 const contentStyle = {
@@ -41,26 +45,28 @@ const contentStyle = {
       <MyPlanDetailSubHeader />
       <a-layout-content :style="contentStyle">
         <div v-for="ppd in planPerDate" :key="ppd.no">
-          <h1>계획 날짜 : {{ ppd.planTime }}</h1>
-          <div v-for="dp in ppd.detailPlans" :key="dp.no">
-            <a-descriptions title="N 번째 계획" bordered>
+          <a-divider orientation="left">계획 날짜 : {{ parseDate(ppd.planTime) }}</a-divider>
+          <div v-for="(dp, index) in ppd.detailPlans" :key="dp.no">
+            <a-descriptions :title="`계획 ${index + 1}`" bordered>
               <a-descriptions-item label="관광지 명">{{ dp.attractionName }}</a-descriptions-item>
               <a-descriptions-item label="비용">{{ dp.cost }}</a-descriptions-item>
-              <a-descriptions-item label="시작 시간" :span="2">
-                {{ parseDate(dp.startTime) }}
+              <br />
+              <a-descriptions-item label="시작 시간">
+                {{ parseDateToTime(dp.startTime) }}
               </a-descriptions-item>
-              <a-descriptions-item label="끝난 시간" :span="2">{{
-                dp.endTime
-              }}</a-descriptions-item>
-              <a-descriptions-item label="Config Info">
+              <a-descriptions-item label="끝난 시간">
+                {{ parseDateToTime(dp.endTime) }}
+              </a-descriptions-item>
+              <!-- <a-descriptions-item label="Config Info">
                 컨텐츠 정보1
                 <br />
                 컨텐츠 정보2
                 <br />
                 컨텐츠 정보3
-              </a-descriptions-item>
+              </a-descriptions-item> -->
             </a-descriptions>
           </div>
+          <br />
         </div>
       </a-layout-content>
     </a-layout>
