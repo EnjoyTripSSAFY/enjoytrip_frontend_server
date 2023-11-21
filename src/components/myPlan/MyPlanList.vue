@@ -1,7 +1,5 @@
 <script setup>
-import GridLayout from './items/GridLayout.vue'
 import MyPlanListSubHeader from './items/MyPlanListSubHeader.vue'
-import MyPlanCard from '@/components/myPlan/items/MyPlanCard.vue'
 
 import { onMounted, reactive, ref, watch } from 'vue'
 import { listTripPlan } from '@/api/planApi'
@@ -12,10 +10,6 @@ const router = useRouter()
 const tripPlan = ref([])
 
 const userNo = ref(1)
-// const tripPlanNo = ref(null)
-// const title = ref(null)
-// const describ = ref(null)
-// const createdTime = ref(null)
 
 onMounted(async () => {
   await listTripPlan(
@@ -46,16 +40,20 @@ const contentStyle = {
     <a-layout>
       <MyPlanListSubHeader />
       <a-layout-content :style="contentStyle">
-        <div v-for="tp in tripPlan" :key="tp.no">
-          <a-card :title="tp.title" style="width: 300px">
-            <template #extra
-              ><router-link :to="{ name: 'myPlan-detail', params: { tripPlanNo: tp.no } }"
-                >detail</router-link
-              ></template
-            >
-            <p>내용 : {{ tp.describ }}</p>
-            <p>생성 일자 : {{ parseDate(tp.createdTime) }}</p>
-          </a-card>
+        <div>
+          <a-row :gutter="16">
+            <a-col :span="6" v-for="(tp, index) in tripPlan" :key="tp.no">
+              <a-card :title="tp.title" style="width: 300px; margin-bottom: 50px">
+                <template #extra>
+                  <router-link :to="{ name: 'myPlan-detail', params: { tripPlanNo: tp.no } }"
+                    >detail
+                  </router-link>
+                </template>
+                <p>내용 : {{ tp.describ }}</p>
+                <p>생성 일자 : {{ parseDate(tp.createdTime) }}</p>
+              </a-card>
+            </a-col>
+          </a-row>
         </div>
       </a-layout-content>
     </a-layout>
