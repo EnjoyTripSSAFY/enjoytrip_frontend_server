@@ -43,10 +43,10 @@
     <hr />
 </template>
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
-import { getStateData, getCityData } from '@/api/tripApi'
-import { tripInfoStore } from '@/stores/tripInfoStore'
-import { storeToRefs } from 'pinia'
+import {onMounted, ref, watch} from 'vue'
+import {getCityData, getStateData} from '@/api/tripApi'
+import {tripInfoStore} from '@/stores/tripInfoStore'
+import {storeToRefs} from 'pinia'
 
 const stateList = ref([])
 const cityList = ref([])
@@ -58,11 +58,16 @@ const { selectedState, selectedCity, selectedType } = storeToRefs(tripinfoStore)
 
 onMounted(async () => {
   stateDataLoding.value = true
-  stateList.value = await getStateData()
+  const stateData = await getStateData();
+  const items = stateData && stateData.items; // 안전한 접근
+  const item = items && items.item; // 안전한 접근
+  stateList.value = item
   stateDataLoding.value = false
 
   if(selectedState.value){
-    cityList.value = await getCityData(selectedState.value)
+    const stateData = await getStateData(selectedState.value);
+    const items = stateData && stateData.items;
+    cityList.value = items && items.item;
   }
 
 })
@@ -71,7 +76,9 @@ watch(
   () => selectedState.value,
   async (newVal) => {
     cityDataLoading.value = true
-    cityList.value = await getCityData(newVal)
+    const stateData = await getCityData(selectedState.value);
+    const items = stateData && stateData.items;
+    cityList.value = items && items.item;
     selectedCity.value = ""
     cityDataLoading.value = false
   }

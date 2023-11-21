@@ -9,7 +9,9 @@ async function userConfirm(param, success, fail) {
 
 async function findById(userid, success, fail) {
   local.defaults.headers['access-token'] = sessionStorage.getItem('access-token')
-  await local.get(`/auth/member/info/${userid}`).then(success).catch(fail)
+  console.log(local.defaults.headers['access-token'])
+  const param = {userId :  userid}
+  await local.get(`/auth/member/info/`, param).then(success).catch(fail)
 }
 
 async function tokenRegeneration(user, success, fail) {

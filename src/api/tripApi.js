@@ -13,20 +13,18 @@ const getURL = (baseUrl, queryParams) => {
 }
 
 const getRequest = async (finalUrl) => {
-  try {
-    const response = await axios.get(finalUrl)
-    if (!response.data || response.data.response.header.resultCode !== '0000') {
-      throw new Error('Network response was not ok')
-      alert("네트워크 문제로 인하에 데이터를 받을 수 없습니다.")
-    }
-    return response.data.response.body.items.item
-  } catch (error) {
-    console.error('fetch error:', error)
-    alert("네트워크 문제로 인하에 데이터를 받을 수 없습니다.")
-    return null
-  }
-}
-
+  return await axios.get(finalUrl)
+      .then((res) => {
+        if (!res.data || !res.data.response || !res.data.response.body) {
+          throw new Error('Network response was not ok');
+        }
+        return res.data.response.body;
+      })
+      .catch((err) => {
+        console.error('fetch error:', err);
+        return null;
+      })
+};
 const getStateData = () => {
   const service = 'areaCode1'
   const baseUrl = endPoint + service
@@ -62,13 +60,15 @@ const getCityData = (city) => {
   return getRequest(finalUrl)
 }
 
-const getLocalTripData = async (state, city, type) => {
+const getLocalTripData = async (state, city, type, pageno, pageSize) => {
   const service = 'areaBasedList1'
   const baseUrl = endPoint + service
 
+  if(!pageno) pageno = 1
+
   const queryParams = {
-    numOfRows: '100',
-    pageNo: 1,
+    numOfRows: pageSize,
+    pageNo: pageno,
     MobileOS: 'ETC',
     MobileApp: 'EnjoyTrip',
     areaCode: state,
