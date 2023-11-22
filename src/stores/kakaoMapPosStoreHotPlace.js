@@ -26,7 +26,31 @@ export const kakaoMapPosStoreHotPlace = defineStore('kakaoMapPosStoreHotPlace', 
             });
             // Update places or handle the response as needed
             places.value = response.data.documents;
-            totalSize.value = response.data.meta.total_count
+            totalSize.value = response.data.meta.pageable_count
+
+
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            // Handle error, show a message, etc.
+        }
+    });
+
+    watch(currentPage, async (newKeyword) => {
+        try {
+            const response = await axios.get('http://dapi.kakao.com/v2/local/search/keyword.json?', {
+                params: {
+                    query: searchKeyword.value,
+                    page: currentPage.value,
+                    size: size
+                },
+                headers: {
+                    'Authorization': 'KakaoAK 27791d30c5f0484aee5db5b1f69202d5'
+                },
+            });
+            // Update places or handle the response as needed
+            places.value = response.data.documents;
+            totalSize.value = response.data.meta.pageable_count
 
 
         } catch (error) {

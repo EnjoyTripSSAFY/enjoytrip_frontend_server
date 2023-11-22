@@ -31,12 +31,14 @@
       </a-card>
     </a-divider>
 
+
     <a-pagination
         v-model:current="currentPage"
         v-model:pageSize="pageSize"
         :total="totalSize"
         show-less-items
         :show-total="total => `Total ${total} items`"
+        :default-page-size="pageSizeOption"
     />
   </a-card>
 </template>
@@ -49,21 +51,23 @@ import {imageSearch} from "@/api/kakoAPI";
 
 const selectedPlace = ref(null);
 
+const pageSizeOption = ref([15])
+
 const isSelected = (place) => {
   return selectedPlace.value === place;
 };
 
 const {currentPos, searchKeyword, places, totalSize, currentPage} = storeToRefs(kakaoMapPosStoreHotPlace())
 
-const pageSize = ref(20);
+const pageSize = ref(15);
 const current = ref(1);
 const searchValue = ref()
 
 watch(pageSize, () => {
-  selectedPgSize.value = pageSize.value
+  totalSize.value = pageSize.value
 });
 watch(current, () => {
-  selectedPgno.value = current.value
+  currentPage.value = current.value
 });
 
 const clickHeader = async (res) => {
