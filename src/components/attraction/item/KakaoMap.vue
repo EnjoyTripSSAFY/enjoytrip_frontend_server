@@ -8,7 +8,7 @@
 import {tripInfoStore} from '@/stores/tripInfoStore'
 import {storeToRefs} from 'pinia'
 import {onMounted, ref, watch, watchEffect} from 'vue'
-import {kakaoMapPosStore} from "@/stores/kakaoMapPosStore";
+import {kakaoMapPosStoreAttraction} from "@/stores/kakaoMapPosStoreAttraction";
 
 
 var map = null
@@ -19,7 +19,7 @@ const markers = ref([])
 const attractionInform = ref()
 const tripinfoStore = tripInfoStore()
 const {responseData} = storeToRefs(tripinfoStore)
-const {currentPos} = storeToRefs(kakaoMapPosStore())
+const {currentPos} = storeToRefs(kakaoMapPosStoreAttraction())
 
 onMounted(() => {
   if (window.kakao && window.kakao.maps) {
