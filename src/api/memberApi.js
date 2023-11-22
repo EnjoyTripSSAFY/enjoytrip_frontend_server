@@ -10,7 +10,7 @@ async function userConfirm(param, success, fail) {
 async function findById(userid, success, fail) {
   local.defaults.headers['access-token'] = sessionStorage.getItem('access-token')
   console.log(local.defaults.headers['access-token'])
-  const param = {userId :  userid}
+  const param = { userId: userid }
   await local.get(`/auth/member/info/`, param).then(success).catch(fail)
 }
 
@@ -23,7 +23,11 @@ async function logout(userid, success, fail) {
   await local.get(`/auth/member/logout/${userid}`).then(success).catch(fail)
 }
 
-export { userConfirm, findById, tokenRegeneration, logout }
+async function join(param, success, fail) {
+  await local.post(`/member/join`, param).then(success).catch(fail)
+}
+
+export { userConfirm, findById, tokenRegeneration, logout, join }
 
 // import { localAxios } from '@/util/http-commons'
 

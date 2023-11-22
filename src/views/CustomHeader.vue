@@ -62,7 +62,7 @@ import { useRouter } from 'vue-router'
 import { useMemberStore } from '@/stores/member'
 import { storeToRefs } from 'pinia'
 
-const { isLogin, userInfo } = storeToRefs(useMemberStore())
+let { isLogin, userInfo } = storeToRefs(useMemberStore())
 const menuTheme = ref('light') // or 'light'
 const currentMenu = ref('home')
 
