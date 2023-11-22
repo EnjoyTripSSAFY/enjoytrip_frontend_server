@@ -83,6 +83,7 @@ const formState = reactive({
 })
 
 const onFinish = async (values) => {
+  console.log('values = ' + values)
   await userLogin(values)
   let token = sessionStorage.getItem('access-token')
   console.log('isLogin : ' + isLogin.value)
