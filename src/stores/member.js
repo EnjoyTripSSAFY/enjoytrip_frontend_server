@@ -23,10 +23,19 @@ export const useMemberStore = defineStore('memberStore', () => {
         if (data['httpStatus'] === 'CREATED') {
           let accessToken = data['result']['accessToken']
           let refreshToken = data['result']['refreshToken']
+
+          console.log('accessToken : ' + accessToken)
+          console.log('refreshToken : ' + refreshToken)
           isLogin.value = true
           isLoginError.value = false
           isValidToken.value = true
-          userInfo.value = { user: data['result']['info']['user'], role: 'User' }
+
+          const decodedUser = jwtDecode(accessToken)
+          console.log('decodedUser = ' + decodedUser)
+          // userInfo.value = { user: data['result']['sub'], role: data['result']['auth'] }
+          userInfo.value = { user: data['result'] }
+          console.log('userInfo = ' + data['result'])
+          // userInfo.value = { user: data['result']['info']['user'], role: 'User' }
           console.log(userInfo.value, isLogin.value)
           sessionStorage.setItem('access-token', accessToken)
           sessionStorage.setItem('refresh-token', refreshToken)
@@ -62,9 +71,9 @@ export const useMemberStore = defineStore('memberStore', () => {
   const getUserInfo = async (token) => {
     let decodeToken = jwtDecode(token)
     console.log(decodeToken)
-
+    console.log('name = ' + decodeToken['sub'])
     await findById(
-      decodeToken.userId,
+      decodeToken['sub'],
       (response) => {
         let { data } = response
         if (data['httpStatus'] === 'OK') {

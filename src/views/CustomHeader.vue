@@ -28,7 +28,7 @@
           </a-sub-menu>
 
           <a-sub-menu
-            v-else-if="isLogin && userInfo.role === 'User'"
+            v-else-if="isLogin && userInfo.role === 'ROLE_MEMBER'"
             key="userMenu"
             :title="userInfo.user"
           >
@@ -37,7 +37,7 @@
           </a-sub-menu>
 
           <a-sub-menu
-            v-if="isLogin && userInfo.role === 'Admin'"
+            v-if="isLogin && userInfo.role === 'ROLE_ADMIN'"
             key="adminMenu"
             :title="userInfo.user"
           >
@@ -78,9 +78,8 @@ const logout = (userId) => {
   userLogout(userId)
 }
 
-////////////
-
 function moveHome() {
+  console.log('user = ' + userInfo.value)
   router.push({ name: 'home' })
 }
 function moveTripInfoSharing() {
