@@ -1,6 +1,6 @@
 import AttractionView from '@/views/AttractionView.vue'
 import AttractionList from '@/components/attraction/AttractionList.vue'
-import AttractionListView from "@/views/AttractionListView.vue";
+import AttractionListView from "@/components/attraction/AttractionListView.vue";
 
 const attractionRouter = [
   {

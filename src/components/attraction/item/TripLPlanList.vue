@@ -32,11 +32,11 @@
 import {ref, watch} from "vue";
 import {tripInfoStore} from "@/stores/tripInfoStore"
 import {storeToRefs} from "pinia";
-import {kakaoMapPosStore} from "@/stores/kakaoMapPosStore";
+import {kakaoMapPosStoreAttraction} from "@/stores/kakaoMapPosStoreAttraction";
 
 const tripinfoStore = tripInfoStore()
 const {selectedPgno, selectedPgSize, responseData, totalSize, isLoading } = storeToRefs(tripinfoStore)
-const {currentPos} = storeToRefs(kakaoMapPosStore())
+const {currentPos} = storeToRefs(kakaoMapPosStoreAttraction())
 
 const pageSize = ref(20);
 const current = ref(1);

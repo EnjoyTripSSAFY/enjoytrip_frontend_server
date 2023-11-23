@@ -1,7 +1,8 @@
 <template>
   <a-card title="관광지 좌표" >
 
-    <a-card v-for="res in responseData" :title="res.title" :style="{ marginTop: '16px' }" @click="clickHeader(res)">
+    <a-card v-for="res in responseData" :title="res.title" :style="{ marginTop: '16px' }"
+            @click="clickHeader(res)" :class="{ 'custom-card': isSelected(res) }">
       <template #extra>
         <a href="#">More</a>
       </template>
@@ -33,11 +34,17 @@
 import {ref, watch} from "vue";
 import {tripInfoStore} from "@/stores/tripInfoStore"
 import {storeToRefs} from "pinia";
-import {kakaoMapPosStore} from "@/stores/kakaoMapPosStore";
+import {kakaoMapPosStoreAttraction} from "@/stores/kakaoMapPosStoreAttraction";
+
+const selectedPlace = ref(null);
+
+const isSelected = (place) => {
+  return selectedPlace.value === place;
+};
 
 const tripinfoStore = tripInfoStore()
 const {selectedPgno, selectedPgSize, responseData, totalSize, isLoading } = storeToRefs(tripinfoStore)
-const {currentPos} = storeToRefs(kakaoMapPosStore())
+const {currentPos} = storeToRefs(kakaoMapPosStoreAttraction())
 
 const pageSize = ref(20);
 const current = ref(1);
@@ -52,6 +59,8 @@ watch(current, () => {
 });
 
 const clickHeader = (res) => {
+  selectedPlace.value = res
+
   currentPos.value = {
     latitude: res.mapx,
     longitude: res.mapy,
@@ -104,5 +113,9 @@ const clickHeader = (res) => {
 }
 :deep .slick-thumb li.slick-active img {
   filter: grayscale(0%);
+}
+
+.custom-card {
+  border-color: #5085BB;
 }
 </style>
