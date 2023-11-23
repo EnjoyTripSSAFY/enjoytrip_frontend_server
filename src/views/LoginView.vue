@@ -3,6 +3,7 @@
     <div class="logo-container">
       <h1 style="font-size: 60px">Login</h1>
     </div>
+
     <div class="logo-container">
       <img src="@/assets/logo.svg" alt="Logo" width="160" height="160" />
     </div>
@@ -37,7 +38,11 @@
             </template>
           </a-input-password>
         </a-form-item>
-
+        <!-- <div v-if="isLoginError === true">
+          <a-space direction="vertical" style="width: 100%">
+            <a-alert type="error" message="로그인 실패" banner />
+          </a-space>
+        </div> -->
         <a-form-item>
           <a-form-item name="remember" no-style>
             <a-checkbox v-model:checked="formState.remember">Remember me</a-checkbox>
@@ -55,7 +60,7 @@
             Log in
           </a-button>
           Or
-          <a href="">register now!</a>
+          <a @click="moveRegist">register now!</a>
         </a-form-item>
       </a-form>
     </div>
@@ -68,12 +73,29 @@ import { useRouter } from 'vue-router'
 import { useMemberStore } from '@/stores/member'
 import { useMenuStore } from '@/stores/menu'
 import { ref, reactive, computed } from 'vue'
+import { message } from 'ant-design-vue'
+
+const loginSuccessMessage = () => {
+  message.info('로그인!')
+}
+
+const loginFailMessage = () => {
+  message.error('로그인 실패!')
+}
+
+message.config({
+  top: '100px',
+  duration: 2,
+  maxCount: 2,
+  rtl: true,
+  prefixCls: 'my-message'
+})
 
 const router = useRouter()
 const memberStore = useMemberStore()
 
 const { userLogin, getUserInfo } = memberStore
-const { isLogin } = storeToRefs(memberStore)
+const { isLogin, isLoginError } = storeToRefs(memberStore)
 const { changeMenuState } = useMenuStore()
 
 const formState = reactive({
@@ -87,13 +109,21 @@ const onFinish = async (values) => {
   await userLogin(values)
   let token = sessionStorage.getItem('access-token')
   console.log('isLogin : ' + isLogin.value)
-  if (isLogin) {
+  console.log('isLoginFail : ' + isLoginError.value)
+  if (isLogin.value === true) {
     getUserInfo(token)
+    loginSuccessMessage()
+  } else {
+    loginFailMessage()
   }
-  await router.push({ name: 'home' })
+}
+
+const moveRegist = () => {
+  router.push({ name: 'register' })
 }
 
 const onFinishFailed = (errorInfo) => {
+  loginFailMessage()
   console.log('Failed:', errorInfo)
 }
 const disabled = computed(() => {
@@ -119,7 +149,7 @@ const disabled = computed(() => {
   flex-direction: row-reverse;
   align-items: center;
   justify-content: center;
-  //height: 70vh; /* 화면 전체 높이에 따라 중앙에 배치 */
+  /* height: 70vh; 화면 전체 높이에 따라 중앙에 배치 */
 }
 #components-form-demo-normal-login .login-form {
   max-width: 300px;

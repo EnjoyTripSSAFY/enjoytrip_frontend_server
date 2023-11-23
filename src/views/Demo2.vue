@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <a-layout style="min-height: 100vh">
     <a-layout-sider v-model:collapsed="collapsed" collapsible>
       <div class="logo" />
@@ -97,4 +97,4 @@ const openKeys = ref<string[]>(['sub1']);
 [data-theme='dark'] .site-layout .site-layout-background {
   background: #141414;
 }
-</style>
+</style> -->

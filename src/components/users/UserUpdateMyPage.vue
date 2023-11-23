@@ -57,6 +57,20 @@ import { useMemberStore } from '@/stores/member'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
+import { message } from 'ant-design-vue'
+
+const updateMessage = () => {
+  message.success('수정 성공!')
+  router.push({ name: 'home' })
+}
+
+message.config({
+  top: '100px',
+  duration: 1,
+  maxCount: 1,
+  rtl: true,
+  prefixCls: 'my-message'
+})
 
 const router = useRouter()
 const memberStore = useMemberStore()
@@ -104,8 +118,8 @@ const selectChangeHandler = (e) => {
 const onFinish = async (values) => {
   formState.value = values
   await userUpdate(formState)
-  console.log('Success:', values)
-  await router.push({ name: 'login' })
+  updateMessage()
+  await router.push({ name: 'user-mypage' })
 }
 
 // const onFinish = (values) => {

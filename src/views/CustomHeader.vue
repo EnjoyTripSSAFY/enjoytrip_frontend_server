@@ -2,7 +2,7 @@
   <a-layout-header :style="{ background: '#fff', padding: '0 50px' }">
     <a-row :gutter="16" type="flex" justify="space-between" align="middle">
       <a-col :span="4">
-        <img class="logo" src="@/assets/logo.svg" alt="Logo" @click="moveHome" />
+        <img class="logo" src="@/assets/img/gallery/logo.png" alt="Logo" @click="moveHome" />
       </a-col>
 
       <a-col :span="9">
@@ -61,6 +61,20 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMemberStore } from '@/stores/member'
 import { storeToRefs } from 'pinia'
+import { message } from 'ant-design-vue'
+
+const logoutMessage = () => {
+  message.warning('로그아웃!')
+  router.push({ name: 'home' })
+}
+
+message.config({
+  top: '100px',
+  duration: 2,
+  maxCount: 3,
+  rtl: true,
+  prefixCls: 'my-message'
+})
 
 let { isLogin, userInfo } = storeToRefs(useMemberStore())
 const menuTheme = ref('light') // or 'light'
@@ -73,16 +87,21 @@ const memberStore = useMemberStore()
 let { userLogout } = memberStore
 
 const logout = (userId) => {
+  logoutMessage()
   console.log('로그아웃!!!!')
   console.log(userId)
   userLogout(userId)
 }
 
 function moveMyPage() {
+  // if (!isLogin.value) {
+  //   router.push({ name: '403page' })
+  // }
   router.push({ name: 'user-mypage' })
 }
 
 function moveHome() {
+  console.log(userInfo)
   router.push({ name: 'home' })
 }
 function moveTripInfoSharing() {
@@ -98,6 +117,11 @@ function moveHotPlace() {
 }
 
 function moveTripPlan() {
+  // if (!isLogin.value) {
+  //   router.push({ name: '403page' })
+  // } else {
+  //   router.push({ name: 'tripPlan' })
+  // }
   router.push({ name: 'tripPlan' })
 }
 
@@ -110,6 +134,12 @@ function moveRegister() {
 }
 
 function moveMyPlan() {
+  console.log('isLogin = ' + isLogin.value)
+  // if (!isLogin.value) {
+  //   router.push({ name: '403page' })
+  // } else {
+  //   router.push({ name: 'myPlan' })
+  // }
   router.push({ name: 'myPlan' })
 }
 </script>

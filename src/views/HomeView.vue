@@ -1,91 +1,52 @@
-<script setup>
-// document.querySelector('.object-fit-cover').addEventListener(
-//   'ended',
-//   function () {
-//     this.currentTime = 0
-//     this.play()
-//   },
-//   false
-// )
-</script>
-
 <template>
-  <main>
-    <section>
-
-      <div>
-        여행의 시작, 앤조이 트립
-      </div>
-    </section>
-
-    <div class="">
-      <div class="">어디로 가고 싶나요?</div>
-      <!--  Carousel    -->
+  <div class="base-container">
+    <div class="logo-container">
+      <h1 style="font-size: 60px">아냐와 함께 여행을 떠나보자!</h1>
     </div>
-  </main>
-
-  <footer>
-    <nav class="navbar navbar-expand-md navbar-light">
-      <div class="container">
-        <div class="d-flex justify-content-between align-items-center w-100">
-          <div>
-            <a href="#" class="fw-bold text-light text-decoration-none">이용약관</a><br />
-            <a href="#" class="fw-bold text-light text-decoration-none">개인정보약관</a>
-          </div>
-
-          <div>
-            <a class="navbar-brand" href="/">
-              <img
-                src="@/assets/img/gallery/logo.png"
-                width="50px"
-                height="50px"
-                alt="Reader | Hugo Personal Blog Template"
-              />
-            </a>
-          </div>
-
-          <div>
-            <ul class="list-inline footer-list mb-0">
-              <li class="list-inline-item">
-                <a href="#"><i class="fab fa-instagram"></i></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#"><i class="fab fa-youtube"></i></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#"><i class="fab fa-twitter"></i></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#"><i class="fab fa-github-alt"></i></a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <!-- 다른 내용을 추가할 수 있음 -->
-        </div>
-      </div>
-    </nav>
-  </footer>
+  </div>
+  <img
+    v-if="data === null"
+    src="@/assets/video/anya.gif"
+    alt="Loading"
+    style="height: 30%; width: 30%"
+  />
+  <div v-else>
+    <div>Here's the data!</div>
+    <pre>{{ data.toString() }}</pre>
+  </div>
 </template>
 
-<style scoped>
-* {
-  font-family: 'Do Hyeon', sans-serif;
-  font-family: 'IBM Plex Sans KR', sans-serif;
-  overflow-x: hidden;
+<script>
+import { ref, onMounted } from 'vue'
+
+export default {
+  setup() {
+    const data = ref(null)
+
+    onMounted(() => {
+      // Replace this `fetch` call with whatever your endpoint call may be.
+      fetch('./endpoint')
+        .then((resp) => resp.json())
+        .then((json) => (data.value = json))
+    })
+
+    return { data }
+  }
+}
+</script>
+
+<style>
+.base-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  height: 10vh; /* 화면 전체 높이에 따라 중앙에 배치 */
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 </style>
