@@ -1,5 +1,15 @@
 import MyPlanList from '@/components/myPlan/MyPlanList.vue'
 
+import TripInfoSharingView from '@/views/TripInfoSharingView.vue'
+import TripInfoSharingList from '@/components/tripInfoSharing/tripInfoSharingList.vue'
+
+const requireAuth = () => (to, from, next) => {
+  if (sessionStorage.getItem('access-token') !== null) {
+    return next()
+  }
+  next('/403page')
+}
+
 const myPlanRouter = [
   {
     path: '/myPlan',
@@ -11,12 +21,14 @@ const myPlanRouter = [
         path: 'list',
         name: 'myPlan-list',
         // component: MyPlanList
-        component: () => import('@/components/myPlan/MyPlanList.vue')
+        component: () => import('@/components/myPlan/MyPlanList.vue'),
+        beforeEnter: requireAuth()
       },
       {
         path: 'detail/:tripPlanNo',
         name: 'myPlan-detail',
-        component: () => import('@/components/myPlan/MyPlanDetail.vue')
+        component: () => import('@/components/myPlan/MyPlanDetail.vue'),
+        beforeEnter: requireAuth()
       }
       // {
       //   path: 'write',

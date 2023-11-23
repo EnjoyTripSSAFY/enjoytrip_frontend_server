@@ -39,13 +39,11 @@ export const useMemberStore = defineStore('memberStore', () => {
           isValidToken.value = true
 
           let decodeToken = jwtDecode(accessToken)
-          console.log('name in userLogin : ', decodeToken['sub'])
           userInfo.value = { name: decodeToken['sub'] }
-          console.log(':::', userInfo.value.name)
 
-          console.log('userInfo in userLogin : ' + userInfo.value)
           sessionStorage.setItem('access-token', accessToken)
           sessionStorage.setItem('refresh-token', refreshToken)
+          router.push({ name: 'home' })
         } else {
           isLogin.value = false
           isLoginError.value = true
@@ -53,7 +51,8 @@ export const useMemberStore = defineStore('memberStore', () => {
         }
       },
       (error) => {
-        console.error(error)
+        isLoginError.value = true
+        console.error('error : ' + error)
       }
     )
   }
@@ -159,6 +158,7 @@ export const useMemberStore = defineStore('memberStore', () => {
       (response) => {
         let { data } = response
         if (data['httpStatus'] === 'OK') {
+          sessionStorage.clear()
           isLogin.value = false
           userInfo.value = null
           isValidToken.value = false
@@ -179,6 +179,7 @@ export const useMemberStore = defineStore('memberStore', () => {
       (response) => {
         let { data } = response
         if (data['httpStatus'] === 'OK') {
+          sessionStorage.clear()
           isLogin.value = false
           userInfo.value = null
           isValidToken.value = false
