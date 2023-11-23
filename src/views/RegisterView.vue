@@ -94,6 +94,7 @@ const onFinish = async (values) => {
   console.log('Success:', values)
   await router.push({ name: 'login' })
 }
+
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo)
 }
