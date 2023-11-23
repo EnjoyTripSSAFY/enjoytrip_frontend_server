@@ -1,40 +1,22 @@
 <script setup></script>
 
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-          <mark class="orange">내정보</mark>
-        </h2>
-      </div>
-      <div class="col-lg-10">
-        <div class="card mt-3 m-auto" style="max-width: 700px">
-          <div class="row g-0">
-            <div class="col-md-4">
-              <img
-                src="https://source.unsplash.com/random/250x250/?food"
-                class="img-fluid rounded-start"
-                alt="..."
-              />
-            </div>
-            <div class="col-md-8">
-              <div class="card-body text-start">
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">SSAFY</li>
-                  <li class="list-group-item">김싸피</li>
-                  <li class="list-group-item">ssafy@ssafy.com</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <button type="button" class="btn btn-outline-secondary mt-2">수정</button>
-        </div>
-      </div>
-    </div>
+  <div style="display: flex">
+    <a-space direction="vertical" :size="32" style="margin: 50px">
+      <a-space wrap :size="16">
+        <a-avatar :size="120">
+          <template #icon><UserOutlined /></template>
+        </a-avatar>
+      </a-space>
+    </a-space>
+    <a-descriptions title="User Info" style="margin-top: 50px">
+      <a-descriptions-item label="아이디">Zhou Maomao</a-descriptions-item>
+      <a-descriptions-item label="이름">1810000000</a-descriptions-item>
+      <a-descriptions-item label="이메일">Hangzhou, Zhejiang</a-descriptions-item>
+      <a-descriptions-item label="가입일">empty</a-descriptions-item>
+      <a-descriptions-item label="계정 유형">
+        No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+      </a-descriptions-item>
+    </a-descriptions>
   </div>
 </template>
-
-<style scoped></style>

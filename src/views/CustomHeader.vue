@@ -28,22 +28,22 @@
           </a-sub-menu>
 
           <a-sub-menu
-            v-else-if="isLogin && userInfo.role === 'ROLE_MEMBER'"
+            v-else-if="isLogin && userInfo.roles === 'MEMBER'"
             key="userMenu"
-            :title="userInfo.user"
+            :title="`${userInfo.userId}(${userInfo.roles})`"
           >
-            <a-menu-item key="myPage">My Page</a-menu-item>
-            <a-menu-item key="logout" @click="logout(userInfo.user)">Logout</a-menu-item>
+            <a-menu-item key="myPage" @click="moveMyPage">My Page</a-menu-item>
+            <a-menu-item key="logout" @click="logout(userInfo.userId)">Logout</a-menu-item>
           </a-sub-menu>
 
           <a-sub-menu
-            v-if="isLogin && userInfo.role === 'ROLE_ADMIN'"
+            v-if="isLogin && userInfo.roles === 'ADMIN'"
             key="adminMenu"
-            :title="userInfo.user"
+            :title="`${userInfo.userId}(${userInfo.roles})`"
           >
-            <a-menu-item key="myPage">My Page</a-menu-item>
+            <a-menu-item key="myPage" @click="moveMyPage">My Page</a-menu-item>
             <a-menu-item key="admin">Admin</a-menu-item>
-            <a-menu-item key="logout" @click="logout(userInfo.user)">Logout</a-menu-item>
+            <a-menu-item key="logout" @click="logout(userInfo.userId)">Logout</a-menu-item>
           </a-sub-menu>
         </a-menu>
       </a-col>
@@ -57,7 +57,7 @@
 }
 </style>
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMemberStore } from '@/stores/member'
 import { storeToRefs } from 'pinia'
@@ -70,7 +70,7 @@ const router = useRouter()
 
 //////////////////////////
 const memberStore = useMemberStore()
-const { userLogout, getUserInfo } = memberStore
+let { userLogout, getUserInfo } = memberStore
 
 const logout = (userId) => {
   console.log('로그아웃!!!!')
@@ -78,8 +78,11 @@ const logout = (userId) => {
   userLogout(userId)
 }
 
+function moveMyPage() {
+  router.push({ name: 'user-mypage' })
+}
+
 function moveHome() {
-  console.log('user = ' + userInfo.value)
   router.push({ name: 'home' })
 }
 function moveTripInfoSharing() {

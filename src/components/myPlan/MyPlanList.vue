@@ -1,15 +1,19 @@
 <script setup>
 import MyPlanListSubHeader from './items/MyPlanListSubHeader.vue'
+import { useMemberStore } from '@/stores/member'
+import { storeToRefs } from 'pinia'
 
-import { onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, onUpdated, onBeforeMount, reactive, ref, watch } from 'vue'
 import { listTripPlan } from '@/api/planApi'
 import { useRoute, useRouter } from 'vue-router'
+const { isLogin, userInfo } = storeToRefs(useMemberStore())
 import dayjs from 'dayjs'
 
 const router = useRouter()
+
 const tripPlan = ref([])
 
-const userNo = ref(1)
+const userNo = ref(userInfo.value.no)
 
 onMounted(async () => {
   await listTripPlan(
