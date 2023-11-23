@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
 
-import { userConfirm, findById, tokenRegeneration, logout, join } from '@/api/memberApi'
+import { userConfirm, findById, tokenRegeneration, logout, join, withdrawal } from '@/api/memberApi'
 import { httpStatusCode } from '@/util/http-status'
 
 export const useMemberStore = defineStore('memberStore', () => {
@@ -50,8 +50,6 @@ export const useMemberStore = defineStore('memberStore', () => {
     )
   }
 
-  /////////////////
-
   const userJoin = async (joinUser) => {
     console.log('joinUser : ' + joinUser)
     await join(
@@ -64,8 +62,6 @@ export const useMemberStore = defineStore('memberStore', () => {
       }
     )
   }
-
-  /////////////////
 
   const getUserInfo = async (token) => {
     let decodeToken = jwtDecode(token)
@@ -155,6 +151,26 @@ export const useMemberStore = defineStore('memberStore', () => {
     )
   }
 
+  const userWithdrawal = async (userid) => {
+    console.log('userid = ' + userid)
+    await withdrawal(
+      userid,
+      (response) => {
+        let { data } = response
+        if (data['httpStatus'] === 'OK') {
+          isLogin.value = false
+          userInfo.value = null
+          isValidToken.value = false
+        } else {
+          console.error('유저 정보 없음!!!!')
+        }
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
+  }
+
   return {
     isLogin,
     isLoginError,
@@ -164,6 +180,7 @@ export const useMemberStore = defineStore('memberStore', () => {
     getUserInfo,
     tokenRegenerate,
     userLogout,
-    userJoin
+    userJoin,
+    userWithdrawal
   }
 })

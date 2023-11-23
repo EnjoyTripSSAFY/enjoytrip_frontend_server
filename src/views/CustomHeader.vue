@@ -70,7 +70,7 @@ const router = useRouter()
 
 //////////////////////////
 const memberStore = useMemberStore()
-let { userLogout, getUserInfo } = memberStore
+let { userLogout } = memberStore
 
 const logout = (userId) => {
   console.log('로그아웃!!!!')

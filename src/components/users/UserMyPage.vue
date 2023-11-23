@@ -1,7 +1,28 @@
-<script setup></script>
+<script setup>
+import { useMemberStore } from '@/stores/member'
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const memberStore = useMemberStore()
+const { userWithdrawal } = memberStore
+let { userInfo } = storeToRefs(useMemberStore())
+
+// const withdrawal = (userId) => {
+//   userWithdrawal(userId)
+//   router.push({ name: 'home' })
+// }
+
+const withdrawal = async () => {
+  console.log('withdrawal!!!')
+  console.log('values = ' + userInfo.value.userId)
+  await userWithdrawal(userInfo.value.userId)
+  await router.push({ name: 'home' })
+}
+</script>
 
 <template>
-  <div style="display: flex">
+  <div style="display: flex; margin-top: 100px">
     <a-space direction="vertical" :size="32" style="margin: 50px">
       <a-space wrap :size="16">
         <a-avatar :size="120">
@@ -18,5 +39,13 @@
         No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
       </a-descriptions-item>
     </a-descriptions>
+  </div>
+  <div>
+    <a-space direction="vertical" style="display: flex; align-items: center; margin-top: 30px">
+      <a-radio-group v-model:value="size">
+        <a-button type="primary" ghost style="margin-right: 10px">수정</a-button>
+        <a-button type="primary" danger ghost @click="withdrawal()">탈퇴</a-button>
+      </a-radio-group>
+    </a-space>
   </div>
 </template>

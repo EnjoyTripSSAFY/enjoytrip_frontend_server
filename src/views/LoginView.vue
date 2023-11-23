@@ -72,8 +72,8 @@ import { ref, reactive, computed } from 'vue'
 const router = useRouter()
 const memberStore = useMemberStore()
 
-const { isLogin } = storeToRefs(memberStore)
 const { userLogin, getUserInfo } = memberStore
+const { isLogin } = storeToRefs(memberStore)
 const { changeMenuState } = useMenuStore()
 
 const formState = reactive({
