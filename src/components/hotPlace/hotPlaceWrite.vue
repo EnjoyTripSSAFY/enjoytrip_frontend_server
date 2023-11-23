@@ -20,7 +20,7 @@ import RegitstHotPlace from "@/components/hotPlace/item/RegitstHotPlace.vue";
         <SearchList style="width: 100%; height:75vh; max-height: 75vh; overflow-y: scroll"/>
       </a-col>
       <a-col :span="6">
-        <RegitstHotPlace/>
+        <RegitstHotPlace style="background:#FFFFFF; width: 100%; height:75vh; max-height: 75vh; overflow-y: scroll"/>
       </a-col>
     </a-row>
   </div>

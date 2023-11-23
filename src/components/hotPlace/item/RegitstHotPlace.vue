@@ -2,7 +2,8 @@
   <a-row>
     <a-col :span="24">
       <a-form>
-        <a-form-item label="이미지 업로드">
+        <a-divider>이미지 업로드 </a-divider>
+        <a-form-item>
           <a-upload-dragger
               v-model:fileList="fileList"
               name="file"
@@ -72,8 +73,9 @@ const place = ref('');
 const date = ref(null);
 const type = ref('');
 const txt = ref('');
-
 const rate = ref(0);
+const { currentPos } = storeToRefs(kakaoMapPosStoreHotPlace())
+
 
 const handleChange = info => {
   const status = info.file.status;
@@ -95,11 +97,14 @@ const onSubmit = () => {
 
 
   const param = {
-    image : fileList.value.map(f => f.response.result.no),
+    placeName : place.value,
+    visitedTime : dayjs(date.value).format('YYYY-MM-DD'),
+    placeType : type.value,
     rate : rate.value,
-    place : place.value,
-    date : dayjs(date.value).format('YYYY-MM-DD'),
-    description : txt.value,
+    describe : txt.value,
+    imageId : fileList.value.map(f => f.response.result.no),
+    longitude : null,
+    latitude : null,
   }
 
   console.log(param)

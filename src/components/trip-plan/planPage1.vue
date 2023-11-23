@@ -1,11 +1,12 @@
 <script setup>
-import AttractionTransfer from '@/components/trip-plan/items/AttractionTransfer.vue'
 import DefaultButton from '@/components/common/items/DefaultButton.vue'
 import Page1SubHeader from '@/components/trip-plan/items/Page1SubHeader.vue'
 import PlanMaker from '@/components/trip-plan/items/PlanMaker.vue'
-import AttractionList from '@/components/attraction/AttractionList.vue'
 import SelectType from "@/components/attraction/item/SelectType.vue";
 import KakaoMap from "@/components/attraction/item/KakaoMap.vue";
+import TripList from "@/components/trip-plan/items/TripList.vue";
+import TripLPlanList from "@/components/trip-plan/items/TripLPlanList.vue";
+
 
 const contentStyle = {
   minHeight: 120
@@ -18,6 +19,9 @@ const siderStyle = {
   backgroundColor: 'white',
   paddingInline: '30px'
 }
+
+
+
 </script>
 
 <template>
@@ -29,18 +33,21 @@ const siderStyle = {
       <a-col :span="12">
         <KakaoMap/>
       </a-col>
+
       <a-col :span="12">
-        <PlanMaker /><AttractionTransfer />
-        <div class="button"><DefaultButton /></div>
+        <a-space direction="horizontal">
+          <PlanMaker />
+        </a-space>
+        <a-space direction="horizontal">
+            <TripList style="width: 100%; height:63vh; max-height: 63vh; overflow-y: scroll"/>
+            <TripLPlanList style="width: 100%; height:63vh; max-height: 63vh; overflow-y: scroll"/>
+        </a-space>
       </a-col>
+
     </a-row>
   </div>
 </template>
 
 <style scoped>
-.button {
-  display: flex;
-  justify-content: flex-end;
-  align-items: start;
-}
+
 </style>
