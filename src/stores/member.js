@@ -11,7 +11,7 @@ export const useMemberStore = defineStore('memberStore', () => {
 
   const isLogin = ref(false)
   const isLoginError = ref(false)
-  const userInfo = ref(null)
+  const userInfo = ref({})
   const isValidToken = ref(false)
 
   const userLogin = async (loginUser) => {
@@ -30,13 +30,12 @@ export const useMemberStore = defineStore('memberStore', () => {
           isLoginError.value = false
           isValidToken.value = true
 
-          const decodedUser = jwtDecode(accessToken)
-          console.log('decodedUser = ' + decodedUser)
-          // userInfo.value = { user: data['result']['sub'], role: data['result']['auth'] }
-          userInfo.value = { user: data['result'] }
-          console.log('userInfo = ' + data['result'])
-          // userInfo.value = { user: data['result']['info']['user'], role: 'User' }
-          console.log(userInfo.value, isLogin.value)
+          let decodeToken = jwtDecode(accessToken)
+          console.log('name in userLogin : ', decodeToken['sub'])
+          userInfo.value = { name: decodeToken['sub'] }
+          console.log(':::', userInfo.value.name)
+
+          console.log('userInfo in userLogin : ' + userInfo.value)
           sessionStorage.setItem('access-token', accessToken)
           sessionStorage.setItem('refresh-token', refreshToken)
         } else {
@@ -77,7 +76,9 @@ export const useMemberStore = defineStore('memberStore', () => {
       (response) => {
         let { data } = response
         if (data['httpStatus'] === 'OK') {
-          userInfo.value = response.data.userInfo
+          userInfo.value = response.data.result
+
+          console.log('userInfo in getUserInfo : ' + userInfo.value)
         } else {
           console.log('유저 정보 없음!!!!')
         }

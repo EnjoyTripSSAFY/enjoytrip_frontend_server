@@ -89,7 +89,6 @@ const onFinish = async (values) => {
   console.log('isLogin : ' + isLogin.value)
   if (isLogin) {
     getUserInfo(token)
-    // changeMenuState()
   }
   await router.push({ name: 'home' })
 }
