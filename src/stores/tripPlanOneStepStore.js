@@ -9,4 +9,4 @@ export const tripInfoFirstStepStore = defineStore('tripInfoFirstStepStore', () =
 
 
     return { storedTripList, storedTripTitle, storedTripTerm }
-})
+}, { persist:false})

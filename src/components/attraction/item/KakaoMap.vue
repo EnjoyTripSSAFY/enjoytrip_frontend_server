@@ -137,7 +137,7 @@ const loadMarkers = () => {
       new kakao.maps.LatLngBounds()
   )
 
-  map.setBounds(bounds)
+  if(bounds) map.setBounds(bounds)
 }
 
 const deleteMarkers = () => {

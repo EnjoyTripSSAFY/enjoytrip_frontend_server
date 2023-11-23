@@ -1,141 +1,139 @@
 <template>
-  <a-form ref="formRef" :model="dynamicValidateForm" v-bind="formItemLayoutWithOutLabel">
-    <a-divider orientation="left">계획 N일차</a-divider>
+  <a-form :model="dynamicValidateForm" :ref="formRef" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+    <a-divider orientation="left">계획 {{ no }}일차</a-divider>
 
     <a-form-item
-      v-for="(domain, index) in dynamicValidateForm.domains"
-      :key="domain.key"
-      v-bind="index === 0 ? formItemLayout : {}"
-      :label="index === 0 ? 'Domains' : ''"
-      :name="['domains', index, 'value']"
-      :rules="{
-        required: true,
-        message: 'domain can not be null',
-        trigger: 'change'
-      }"
+        v-for="(domain, index) in dynamicValidateForm.domains"
+        :key="domain.key"
+        :label="`장소명 ${index + 1}`"
+        :rules="[
+        { required: true, message: '장소명을 입력하세요', trigger: 'change' },
+      ]"
     >
       <a-input
-        v-model:value="domain.value"
-        placeholder="please input domain"
-        style="width: 60%; margin-right: 8px"
+          v-model:value="domain.attractionName"
+          placeholder="장소명을 입력하세요"
+          style="width: 60%; margin-right: 8px"
+          disabled
       />
-      <MinusCircleOutlined
-        v-if="dynamicValidateForm.domains.length > 1"
-        class="dynamic-delete-button"
-        :disabled="dynamicValidateForm.domains.length === 1"
-        @click="removeDomain(domain)"
+
+      <div>
+        <a-time-picker v-model:value="domain.startTime">
+
+        </a-time-picker>
+        <a-time-picker v-model:value="domain.endTime">
+
+        </a-time-picker>
+      </div>
+
+      <a-input-number
+          v-model:value="domain.cost"
+          placeholder="비용을 입력하세요"
+          style="width: 60%; margin-right: 8px"
       />
-      <TimePicker />
-    </a-form-item>
-    <a-form-item v-bind="formItemLayoutWithOutLabel">
-      <a-button type="dashed" style="width: 60%" @click="addDomain">
-        <PlusOutlined />
-        Add field
-      </a-button>
-    </a-form-item>
-    <a-form-item v-bind="formItemLayoutWithOutLabel">
-      <a-button type="primary" html-type="submit" @click="submitForm">Complete</a-button>
-      <a-button style="margin-left: 10px" @click="resetForm">Reset</a-button>
+
+      <a-form-item v-if="no === gap && index+1 === dynamicValidateForm.domains.length"
+                   v-bind="formItemLayoutWithOutLabel" style="margin-top: 20px">
+        <a-button type="primary" html-type="submit" @click="submitForm">Complete</a-button>
+        <a-button style="margin-left: 10px" @click="resetForm">Reset</a-button>
+      </a-form-item>
     </a-form-item>
   </a-form>
 </template>
-<script>
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons-vue'
-import { defineComponent, reactive, ref } from 'vue'
-import TimePicker from '../../common/items/TimePicker.vue'
-export default defineComponent({
-  setup() {
-    const formRef = ref()
-    const formItemLayout = {
-      labelCol: {
-        xs: {
-          span: 24
-        },
-        sm: {
-          span: 4
-        }
-      },
-      wrapperCol: {
-        xs: {
-          span: 24
-        },
-        sm: {
-          span: 20
-        }
-      }
-    }
-    const formItemLayoutWithOutLabel = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0
-        },
-        sm: {
-          span: 20,
-          offset: 4
-        }
-      }
-    }
-    const dynamicValidateForm = reactive({
-      domains: []
+
+<script setup>
+import {ref, reactive, defineProps, onMounted, watch} from 'vue';
+import { storeToRefs } from 'pinia';
+import { tripInfoSecondStepStore } from '@/stores/tripPlanSecondStepStore';
+import { tripInfoFirstStepStore } from "@/stores/tripPlanOneStepStore";
+import {tripInfoFinalStepStore} from "@/stores/tripPlanFinalStepStore";
+import dayjs from "dayjs";
+const props = defineProps(['no', 'gap'])
+const { storedDatePlan } = storeToRefs(tripInfoSecondStepStore());
+const  {storedSchedule} = storeToRefs(tripInfoFinalStepStore())
+const {storedTripTitle, storedTripTerm} = storeToRefs(tripInfoFirstStepStore());
+const formRef = ref();
+const formItemLayout = {
+  labelCol: { xs: { span: 24 }, sm: { span: 4 } },
+  wrapperCol: { xs: { span: 24 }, sm: { span: 20 } },
+};
+
+const dynamicValidateForm = reactive({
+  domains: [],
+});
+
+
+onMounted(async () => {
+  dynamicValidateForm.domains = await storedDatePlan.value[props.no - 1].value.map((t, i) => ({
+    key: i,
+    attractionName: t.title,
+    contentId: t.contentid,
+    planPerDateNo: props.no,
+    startTime: null,
+    endTime: null,
+    cost: null,
+    tempTime : null,
+  }));
+
+  // console.log(storedSchedule.value[props.no-1])
+});
+
+watch(dynamicValidateForm, (newVal, oldValue) => {
+  // console.log(newVal)
+  // console.log(storedSchedule.value[props.no-1])
+
+  storedSchedule.value[props.no-1].value = newVal
+
+
+}, {deep:true})
+
+const submitForm = () => {
+  const detailPlanList = [];
+
+  storedSchedule.value.forEach((t) => {
+    t.value.domains.forEach((x) => {
+      detailPlanList.push({
+        startTime: dayjs(x.startTime).format("hh:mm:ss"),
+        endTime: dayjs(x.endTime).format("hh:mm:ss"),
+        contentId: x.contentId,
+        planPerDateNo: x.planPerDateNo,
+        cost: x.cost
+      });
+    });
+  });
+
+  // detailPlanList 배열을 어떻게 사용할지는 여기에 추가 코드를 작성해 주세요.
+  const title = storedTripTitle.value
+  let planPerDateList = []
+
+  let tripPlanNo = 1;
+
+  for (let i = 0; i < props.gap; i++) {
+
+    planPerDateList.push({
+        "tripPlanNo" : tripPlanNo,
+        "planTime" : dayjs(storedTripTerm.value[0]).add(i, 'day').format('YYYY-MM-DD')
     })
-    const submitForm = () => {
-      formRef.value
-        .validate()
-        .then(() => {
-          console.log('values', dynamicValidateForm.domains)
-        })
-        .catch((error) => {
-          console.log('error', error)
-        })
-    }
-    const resetForm = () => {
-      formRef.value.resetFields()
-    }
-    const removeDomain = (item) => {
-      let index = dynamicValidateForm.domains.indexOf(item)
-      if (index !== -1) {
-        dynamicValidateForm.domains.splice(index, 1)
-      }
-    }
-    const addDomain = () => {
-      dynamicValidateForm.domains.push({
-        value: '',
-        key: Date.now()
-      })
-    }
-    return {
-      formRef,
-      formItemLayout,
-      formItemLayoutWithOutLabel,
-      dynamicValidateForm,
-      submitForm,
-      resetForm,
-      removeDomain,
-      addDomain
-    }
-  },
-  components: {
-    MinusCircleOutlined,
-    PlusOutlined,
-    TimePicker
   }
-})
+
+  let userNo = 1;
+  let describe = "노잼도시"
+
+  const param = {
+    "userNo" : userNo,
+    "describle" : describe,
+    "title" : title,
+    "planPerDateList" : planPerDateList,
+    "detailPlanList" : detailPlanList
+  }
+
+  console.log(detailPlanList)
+  console.log('param', param)
+};
+
 </script>
+
 <style>
-.dynamic-delete-button {
-  cursor: pointer;
-  position: relative;
-  top: 4px;
-  font-size: 24px;
-  color: #999;
-  transition: all 0.3s;
-}
-.dynamic-delete-button:hover {
-  color: #777;
-}
-.dynamic-delete-button[disabled] {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
+/* Add your styles here if needed */
 </style>
+
