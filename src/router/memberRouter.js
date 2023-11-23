@@ -35,6 +35,12 @@ const memberRouter = [
     name: 'user-mypage',
     beforeEnter: onlyAuthUser,
     component: () => import('@/components/users/UserMyPage.vue')
+  },
+  {
+    path: '/update-mypage',
+    name: 'user-update-mypage',
+    beforeEnter: onlyAuthUser,
+    component: () => import('@/components/users/UserUpdateMyPage.vue')
   }
 ]
 

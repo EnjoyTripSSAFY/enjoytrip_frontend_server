@@ -28,11 +28,15 @@ async function join(param, success, fail) {
   await local.post(`/member/join`, param).then(success).catch(fail)
 }
 
+async function update(param, success, fail) {
+  await local.put(`/member`, param).then(success).catch(fail)
+}
+
 async function withdrawal(userid, success, fail) {
   await local.put(`/member/withdrawal/${userid}`).then(success).catch(fail)
 }
 
-export { userConfirm, findById, tokenRegeneration, logout, join, withdrawal }
+export { userConfirm, findById, tokenRegeneration, logout, join, withdrawal, update }
 
 // import { localAxios } from '@/util/http-commons'
 
