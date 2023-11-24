@@ -65,7 +65,7 @@ onMounted(async () => {
   stateDataLoding.value = false
 
   if(selectedState.value){
-    const stateData = await getStateData(selectedState.value);
+    const stateData = await getCityData(selectedState.value);
     const items = stateData && stateData.items;
     cityList.value = items && items.item;
   }
