@@ -14,11 +14,17 @@ import {useRouter} from "vue-router";
 const { storedTripList, storedTripTerm } = storeToRefs(tripInfoFirstStepStore());
 const { storedDatePlan } = storeToRefs(tripInfoSecondStepStore())
 
-const gap = ref(dayjs(storedTripTerm.value[1]).diff(storedTripTerm.value[0], 'day') + 1)
 const router = useRouter();
+const gap = ref(null)
 
 
 onMounted(async () => {
+  const afterDate = await storedTripTerm.value[1];
+  const beforeDate = await storedTripTerm.value[0];
+  const dateDiff = dayjs(afterDate).diff(beforeDate, 'day') + 1;
+  gap.value = dateDiff;
+
+
   if(await storedDatePlan.value.length !== gap.value){
     await storedDatePlan.value.push(...Array.from({ length: gap.value }, () => ref([])));
 
