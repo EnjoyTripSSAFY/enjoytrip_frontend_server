@@ -113,7 +113,8 @@ function moveAttraction() {
 }
 
 function moveHotPlace() {
-  router.push({ name: 'hotPlace' })
+  // router.push({ name: 'hotPlace' })
+  router.push({ name: 'updatePage' })
 }
 
 function moveTripPlan() {
