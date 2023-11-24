@@ -35,5 +35,3 @@ onMounted(() => {
     .then((json) => (data.value = json))
 })
 </script>
-
-<!-- https://i.namu.wiki/i/SfSJlndFJVJUnIutrcL3_2AwpHIIDxSF8lgF2dAlAu1traJdehjV-NyAXucewHb70ep9d4Vsm4t51BcBsALbnw.gif -->

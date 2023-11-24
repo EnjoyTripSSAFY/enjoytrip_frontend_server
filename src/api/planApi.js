@@ -19,13 +19,29 @@ const listPlanPerDateAndDetail = async (param, success, fail) => {
   axios.get(url).then(success).catch(fail)
 }
 
+const getTripPerDateNo = (success, fail) => {
+  const url = `${endPoint}getNo`
+
+  axios.get(url).then(success).catch(fail)
+}
+
 const createTripPlanAndPlanPerDateAndDetailPlan = async (param, success, fail) => {
   const url = endPoint
+  const config = {
+    headers: {
+      'Content-Type': 'application/json' // Set the content type based on your API requirements
+    }
+  }
 
   axios.post(url, param, config).then(success).catch(fail)
 }
 
-export { listTripPlan, listPlanPerDateAndDetail, createTripPlanAndPlanPerDateAndDetailPlan }
+export {
+  listTripPlan,
+  listPlanPerDateAndDetail,
+  getTripPerDateNo,
+  createTripPlanAndPlanPerDateAndDetailPlan
+}
 
 // const deletePlan = async (param, success, fail) => {
 //   const url = endPoint
