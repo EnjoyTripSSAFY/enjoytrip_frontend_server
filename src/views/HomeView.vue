@@ -1,52 +1,99 @@
 <template>
-  <div class="base-container">
-    <div class="logo-container">
-      <h1 style="font-size: 60px">아냐와 함께 여행을 떠나보자!</h1>
+  <div class="bg">
+    <video muted autoplay loop>
+      <source src="@/assets/video/beach.mp4" type="video/mp4" />
+    </video>
+    <div class="text">
+      <p>Enjoy your trip</p>
     </div>
   </div>
-  <img
-    v-if="data === null"
-    src="@/assets/video/anya.gif"
-    alt="Loading"
-    style="height: 30%; width: 30%"
-  />
-  <div v-else>
-    <div>Here's the data!</div>
-    <pre>{{ data.toString() }}</pre>
-  </div>
+
+  <a-carousel arrows dots-class="slick-dots slick-thumb">
+    <template #customPaging="props">
+      <a>
+        <img :src="getImgUrl(props.i)" />
+      </a>
+    </template>
+    <div v-for="item in 4" :key="item">
+      <img :src="getImgUrl(item - 1)" />
+    </div>
+  </a-carousel>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
-
-export default {
+import { defineComponent } from 'vue'
+const baseUrl =
+  'https://raw.githubusercontent.com/vueComponent/ant-design-vue/main/components/carousel/demo/'
+export default defineComponent({
   setup() {
-    const data = ref(null)
-
-    onMounted(() => {
-      // Replace this `fetch` call with whatever your endpoint call may be.
-      fetch('./endpoint')
-        .then((resp) => resp.json())
-        .then((json) => (data.value = json))
-    })
-
-    return { data }
+    const getImgUrl = (i) => {
+      return `${baseUrl}abstract0${i + 1}.jpg`
+    }
+    return {
+      getImgUrl
+    }
   }
-}
+})
 </script>
 
-<style>
-.base-container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-  height: 10vh; /* 화면 전체 높이에 따라 중앙에 배치 */
+<style scoped>
+/* For demo */
+:deep(.slick-dots) {
+  position: relative;
+  height: auto;
+}
+:deep(.slick-slide img) {
+  border: 5px solid #fff;
+  display: block;
+  margin: auto;
+  max-width: 80%;
+}
+:deep(.slick-arrow) {
+  display: none !important;
+}
+:deep(.slick-thumb) {
+  bottom: 0px;
+}
+:deep(.slick-thumb li) {
+  width: 60px;
+  height: 45px;
+}
+:deep(.slick-thumb li img) {
+  width: 100%;
+  height: 100%;
+  filter: grayscale(100%);
+  display: block;
+}
+:deep .slick-thumb li.slick-active img {
+  filter: grayscale(0%);
 }
 
-.logo-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+/*  */
+video {
+  width: 100%;
+}
+.text {
+  position: absolute;
+  width: 100%;
+  top: 60%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+.text p {
+  text-align: center;
+  font-size: 48px;
+  color: black;
+}
+
+@media (max-width: 664px) {
+  .bg {
+    height: auto;
+  }
+  video {
+    height: 400px;
+  }
+  .text p {
+    font-size: 24px;
+  }
 }
 </style>
